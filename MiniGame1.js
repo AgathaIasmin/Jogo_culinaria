@@ -36,7 +36,7 @@ let meggyReactionTimeout;
 
 // Imagens dos ingredientes
 const INGREDIENT_IMAGES = {
-    'Pão': './assets/./assets/img/pao.png',
+    'Pão': './assets/img/pao.png',
     'Queijo': './assets/img/queijo.png',
     'Hambúrguer': './assets/img/hamburguer.png',
     'Tomate': './assets/img/tomate.png',
