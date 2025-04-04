@@ -70,7 +70,7 @@ body {
     display: none;
     z-index: 7;
     overflow: hidden;
-    background-image: url(./img/minigame1_background.png);
+    background-image: url(./assets/img/minigame1_background.png);
     background-size: cover;
     background-repeat: no-repeat;
 }
