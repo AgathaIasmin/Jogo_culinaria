@@ -1,349 +1,287 @@
 body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Arial', sans-serif;
-	overflow: hidden;
-	background-color: #f5f5f5;
-	cursor: crosshair;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    cursor: crosshair;
 }
 
 #menu {
-	background-image: url("./assets/img/home_background.png");
-	background-size: contain;
-	/* Alterado para contain */
-	background-repeat: no-repeat;
-	/* Adicionado para evitar repetição */
-	background-position: center;
-	/* Adicionado para centralizar */
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	align-items: center;
-	z-index: 10;
+    background-image: url("./assets/img/home_background.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
 }
 
 /* Estilo do botão principal */
 #start-btn {
-	display: inline-block;
-	padding: 25px 60px;
-	font-size: 2.2em;
-	font-weight: bold;
-	color: #fff;
-	background: linear-gradient(145deg, #FF6B6B, #FF8E8E);
-	border: none;
-	border-radius: 60px;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
-		0 0 0 5px #FFF9C4,
-		0 0 0 10px #FFD3B6;
-	cursor: pointer;
-	transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	position: relative;
-	overflow: hidden;
-	font-family: 'Comic Sans MS', 'Marker Felt', cursive;
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-	margin: 40px 0;
-	z-index: 2;
-	transform-style: preserve-3d;
+    display: inline-block;
+    padding: 25px 60px;
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(145deg, #FF6B6B, #FF8E8E);
+    border: none;
+    border-radius: 60px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
+        0 0 0 5px #FFF9C4,
+        0 0 0 10px #FFD3B6;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', 'Marker Felt', cursive;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 40px 0;
+    z-index: 2;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+    margin-top: 36rem; /* Ajuste a margem superior para mover mais para baixo */
+    margin-right: 30rem; /* Ajuste a margem esquerda para mover mais para a esquerda */
 }
 
 /* Efeito 3D no hover */
 #start-btn:hover {
-	transform: translateY(-8px) rotateX(15deg);
-	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
-		0 0 0 5px #FFF9C4,
-		0 0 0 10px #FFD3B6;
+    transform: translateY(-8px) rotateX(15deg);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
+        0 0 0 5px #FFF9C4,
+        0 0 0 10px #FFD3B6;
 }
 
-/* Efeito de clique */
-#start-btn:active {
-	transform: translateY(2px);
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2),
-		0 0 0 5px #FFF9C4,
-		0 0 0 10px #FFD3B6;
-}
-
-/* Detalhes de confeitaria */
-#start-btn::before {
-	content: '';
-	position: absolute;
-	top: -5px;
-	left: -5px;
-	right: -5px;
-	bottom: -5px;
-	background: linear-gradient(45deg,
-			#FFD166, #FF9A8B, #FF6B6B, #FF8E8E, #FFD166);
-	background-size: 400%;
-	opacity: 0.3;
-	border-radius: 65px;
-	z-index: -1;
-	animation: gradientBG 8s ease infinite;
-}
-
-
-/* Decorações de comida ao redor */
-.food-decoration {
-	font-size: 2em;
-	margin-top: 20px;
-	animation: float 3s ease-in-out infinite;
-	text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
-}
-
-#title {
-	font-size: 4em;
-	color: white;
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-	margin-bottom: 30px;
-}
-
-
-#play-button {
-	background: linear-gradient(145deg, #4CAF50, #2E7D32);
-	color: white;
-	font-size: 1.8em;
-	padding: 18px 40px;
-	border: none;
-	border-radius: 50px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	margin-top: 30px;
-	box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-weight: bold;
-	position: relative;
-	overflow: hidden;
-	z-index: 1;
-}
 
 #play-button::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(145deg, #2E7D32, #1B5E20);
-	z-index: -1;
-	opacity: 0;
-	transition: opacity 0.3s ease;
-	border-radius: 50px;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #2E7D32, #1B5E20);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50px;
 }
 
 #play-button:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
 }
 
 #play-button:hover::before {
-	opacity: 1;
+    opacity: 1;
 }
 
 #play-button:active {
-	transform: translateY(0);
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(0);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 #play-button:focus {
-	outline: none;
-	box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
 }
 
 @keyframes pulse {
-	0% {
-		transform: scale(1);
-	}
+    0% {
+        transform: scale(1);
+    }
 
-	50% {
-		transform: scale(1.05);
-	}
+    50% {
+        transform: scale(1.05);
+    }
 
-	100% {
-		transform: scale(1);
-	}
+    100% {
+        transform: scale(1);
+    }
 }
 
 #play-button {
-	animation: pulse 2s infinite ease-in-out;
+    animation: pulse 2s infinite ease-in-out;
 }
 
 #play-button:hover {
-	animation: none;
+    animation: none;
 }
 
 #animation-screen {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: #333;
-	display: none;
-	justify-content: center;
-	align-items: center;
-	z-index: 9;
-	color: white;
-	font-size: 2em;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9;
+    color: white;
+    font-size: 2em;
 }
 
 #recipe-selection {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: #8BC34A;
-	display: none;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	z-index: 8;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #8BC34A;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 8;
 }
 
 .recipe-option {
-	width: 200px;
-	height: 200px;
-	background-color: white;
-	margin: 20px;
-	border-radius: 15px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	transition: all 0.3s;
-	text-align: center;
-	padding: 10px;
-	font-weight: bold;
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    margin: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
 }
 
 #minigame {
-
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	display: none;
-	z-index: 7;
-	overflow: hidden;
-	background-image: url(./assets/img/minigame1_background.png);
-	background-size: cover;
-	background-repeat: no-repeat;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 7;
+    overflow: hidden;
+    background-image: url(./assets/img/minigame1_background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 #tutorial {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.7);
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	z-index: 10;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
 #tutorial-box {
-	width: 600px;
-	background-color: white;
-	border-radius: 20px;
-	padding: 30px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-	position: relative;
+    width: 600px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 
 #tutorial-character {
-	width: 150px;
-	height: 200px;
-	background-image: url('img/meggy1.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-	position: absolute;
-	left: -120px;
-	bottom: 0;
+    width: 150px;
+    height: 200px;
+    background-image: url('img/meggy1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -120px;
+    bottom: 0;
 }
 
 #tutorial-text {
-	font-size: 1.5em;
-	margin-bottom: 20px;
-	min-height: 120px;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    min-height: 120px;
 }
 
 #tutorial-next {
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	font-size: 1.2em;
-	border-radius: 10px;
-	cursor: pointer;
-	float: right;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    cursor: pointer;
+    float: right;
 }
 
 #character {
-	position: absolute;
-	right: 100px;
-	bottom: 50px;
-	width: 300px;
-	height: 400px;
-	background-image: url('img/meggy.png');
-	background-size: contain;
-	background-repeat: no-repeat;
-	z-index: 2;
-	transition: background-image 0.3s;
+    position: absolute;
+    right: 100px;
+    bottom: 50px;
+    width: 300px;
+    height: 400px;
+    background-image: url('img/meggy.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 2;
+    transition: background-image 0.3s;
 }
 
 .ingredient {
-	position: absolute;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	z-index: 3;
-	display: none;
-	transition: transform 0.2s;
-	background-size: contain;
-	background-position: center;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 3;
+    display: none;
+    transition: transform 0.2s;
+    background-size: contain;
+    background-position: center;
 }
 
 #score {
-	position: absolute;
-	top: 20px;
-	left: 20px;
-	font-size: 2em;
-	color: #333;
-	background: rgba(255, 255, 255, 0.7);
-	padding: 10px;
-	border-radius: 10px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 #lives {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	font-size: 2em;
-	color: #333;
-	background: rgba(255, 255, 255, 0.7);
-	padding: 10px;
-	border-radius: 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 #ingredients-needed {
-	position: absolute;
-	top: 70px;
-	left: 20px;
-	font-size: 1.5em;
-	color: #333;
-	background: rgba(255, 255, 255, 0.7);
-	padding: 10px;
-	border-radius: 10px;
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    font-size: 1.5em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 @keyframes fall {
-	from {
-		transform: translateY(-100px) rotate(0deg);
-	}
+    from {
+        transform: translateY(-100px) rotate(0deg);
+    }
 
-	to {
-		transform: translateY(calc(100vh + 100px)) rotate(360deg);
-	}
+    to {
+        transform: translateY(calc(100vh + 100px)) rotate(360deg);
+    }
 }
 
 .falling {
-	animation: fall linear forwards;
+    animation: fall linear forwards;
 }
