@@ -18,98 +18,130 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     z-index: 10;
 }
 
-/* Estilo do botão principal */
-#start-btn {
-    display: inline-block;
-    padding: 25px 60px;
-    font-size: 2.2em;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(145deg, #FF6B6B, #FF8E8E);
-    border: none;
-    border-radius: 60px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2),
-        0 0 0 5px #FFF9C4,
-        0 0 0 10px #FFD3B6;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    overflow: hidden;
-    font-family: 'Comic Sans MS', 'Marker Felt', cursive;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 40px 0;
-    z-index: 2;
-    transform-style: preserve-3d;
-    transition: all 0.3s ease;
-    margin-top: 36rem; /* Ajuste a margem superior para mover mais para baixo */
-    margin-right: 30rem; /* Ajuste a margem esquerda para mover mais para a esquerda */
-}
-
-/* Efeito 3D no hover */
-#start-btn:hover {
-    transform: translateY(-8px) rotateX(15deg);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3),
-        0 0 0 5px #FFF9C4,
-        0 0 0 10px #FFD3B6;
-}
-
-
-#play-button::before {
-    content: '';
+#meggy-home {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(145deg, #2E7D32, #1B5E20);
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border-radius: 50px;
+    width: 600px;
+    height: 800px;
+    background-image: url('./assets/img/meggy_home.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 50%;
+    margin-right: -750px;
+    bottom: 50px;
+    z-index: 1;
+    animation: float 3s ease-in-out infinite;
+    transform-origin: right bottom;
 }
 
-#play-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
-}
-
-#play-button:hover::before {
-    opacity: 1;
-}
-
-#play-button:active {
-    transform: translateY(0);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-#play-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
     50% {
-        transform: scale(1.05);
-    }
-
-    100% {
-        transform: scale(1);
+        transform: translateY(-20px);
     }
 }
 
-#play-button {
-    animation: pulse 2s infinite ease-in-out;
+#start-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 30rem;
+    margin-right: 30rem;
+    width: 30rem;
+    height: 30rem;
 }
 
-#play-button:hover {
-    animation: none;
+#start-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+#start-btn:hover img {
+    transform: scale(1.05);
+}
+
+#start-btn:active img {
+    transform: scale(0.95);
+}
+
+#credits-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 20rem;
+    width: 20rem;
+    height: 20rem;
+}
+
+#credits-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+#credits-btn:hover img {
+    transform: scale(1.05);
+}
+
+#credits-btn:active img {
+    transform: scale(0.95);
+}
+
+#restart-btn {
+    color: green;
+    animation: move 6s ease infinite;
+    border-radius: 50%;
+    background: #e4dfdf;
+    height: 240px;
+    width: 240px;
+    box-shadow: #e4dfdf 270px -60px 0 -20px,
+        #e4dfdf 100px -1000px,
+        #e4dfdf 120px 40px,
+        #e4dfdf 240px 60px 0 -40px,
+        #e4dfdf 340px 20px 0 -20px;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    outline: none;
+    transition: transform 0.3s ease;
+    margin-top: 20rem;
+    margin-right: 60rem;
+}
+
+#restart-btn:hover {
+    animation: move 6s ease infinite, pulse 0.5s ease infinite alternate;
+    transform: scale(1.1);
+}
+
+#restart-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes move {
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes pulse {
+    to {
+        transform: translateY(-15px) scale(1.05);
+    }
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 #animation-screen {
@@ -129,7 +161,7 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: #8BC34A;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
     display: none;
     flex-direction: column;
     justify-content: center;
@@ -137,19 +169,79 @@ body {
     z-index: 8;
 }
 
+#recipe-selection h1 {
+    color: #fff;
+    font-size: 3.5em;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
+    font-family: 'Comic Sans MS', cursive;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+}
+
+.recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 900px;
+    padding: 20px;
+}
+
 .recipe-option {
     width: 200px;
-    height: 200px;
-    background-color: white;
-    margin: 20px;
-    border-radius: 15px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 25px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+}
+
+.recipe-option:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.recipe-image {
+    width: 100%;
+    height: 140px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 15px;
+}
+
+.recipe-title {
+    padding: 15px;
     text-align: center;
-    padding: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.recipe-difficulty {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FFC107;
+    color: #333;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
     font-weight: bold;
 }
 
@@ -284,4 +376,81 @@ body {
 
 .falling {
     animation: fall linear forwards;
+}
+
+#ending-screen {
+    background-image: url('./assets/img/deadscreen_MiniGame1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#credits-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #673AB7 0%, #512DA8 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+    color: white;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+#credits-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 700px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+#credits-content h2 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    color: #FFC107;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+#credits-content p {
+    font-size: 1.5em;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+#credits-content p strong {
+    color: #FFC107;
+}
+
+#back-btn {
+    margin-top: 30px;
+    background: #FFC107;
+    color: #333;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.3em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#back-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    background: #FFD54F;
 }

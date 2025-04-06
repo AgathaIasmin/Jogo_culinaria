@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MiniGame1.css">
+    <script src="MiniGame1.js" defer></script>
+    <title>Cook & Fire</title>
+</head>
+<body>
+    <div id="menu">
+        <div id="meggy-home"></div>
+        <button id="start-btn">
+            <img src="./assets/img/startButton.png">
+        </button>
+        <button id="credits-btn">
+            <img src="./assets/img/creditsButton.png">
+        </button>
+    </div>
+
+    <div id="animation-screen">
+        <p>Meggy está preparando os ingredientes...</p>
+    </div>
+
+    <div id="recipe-selection">
+        <h1>Escolha sua receita!</h1>
+        <div class="recipes-container">
+            <div class="recipe-option" data-recipe="burger">
+                <div class="recipe-difficulty">Fácil</div>
+                <div class="recipe-image" style="background-image: url('./assets/img/hamburguer.png')"></div>
+                <div class="recipe-title">Hambúrguer Especial<br>(2 queijos)</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="minigame">
+        <div id="tutorial">
+            <div id="tutorial-box">
+                <div id="tutorial-character"></div>
+                <div id="tutorial-text">Oi chef! Vamos preparar um hambúrguer delicioso?</div>
+                <button id="tutorial-next">Próximo</button>
+            </div>
+        </div>
+        <div id="score">Ingredientes: 0/5</div>
+        <div id="lives">Vidas: 3</div>
+        <div id="ingredients-needed">Precisa pegar:<br>• Pão (2x)<br>• Queijo (2x)<br>• Hambúrguer (1x)</div>
+        <div id="character"></div>
+    </div>
+
+    <div id="ending-screen">
+        <button id="restart-btn" class="cloud-btn">Jogar Novamente</button>
+    </div>
+
+    <div id="credits-screen">
+        <div id="credits-content">
+            <h2>Créditos</h2>
+            <p><strong>Desenvolvido por:</strong> Sua Equipe Incrível</p>
+            <p><strong>Design:</strong> Designer Mestre</p>
+            <p><strong>Programação:</strong> Code Wizard</p>
+            <p><strong>Artes:</strong> Artista Visionário</p>
+            <p><strong>Música:</strong> Maestro Digital</p>
+            <p><strong>Agradecimentos Especiais:</strong> Todos os jogadores!</p>
+            <button id="back-btn" class="cloud-btn">Voltar ao Menu</button>
+        </div>
+    </div>
+</body>
+</html>
