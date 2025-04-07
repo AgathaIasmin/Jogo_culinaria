@@ -159,13 +159,6 @@ body {
     }
 }
 
-.buttons-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
 #animation-screen {
     position: absolute;
     width: 100%;
