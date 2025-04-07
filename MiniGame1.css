@@ -44,9 +44,8 @@ body {
     background-image: url('./assets/img/you_dead.png');
     background-size: contain;
     background-repeat: no-repeat;
-    right: 50%;
-    margin-right: -750px;
-    bottom: 50px;
+    margin-top: 5rem;
+    margin-left: 40rem;
     z-index: 1;
     animation: float 3s ease-in-out infinite;
     transform-origin: right bottom;
@@ -125,32 +124,26 @@ body {
 }
 
 #restart-btn {
-    color: green;
-    animation: move 6s ease infinite;
-    border-radius: 50%;
-    background: #e4dfdf;
-    height: 240px;
-    width: 240px;
-    box-shadow: #e4dfdf 270px -60px 0 -20px,
-        #e4dfdf 100px -1000px,
-        #e4dfdf 120px 40px,
-        #e4dfdf 240px 60px 0 -40px,
-        #e4dfdf 340px 20px 0 -20px;
-    cursor: pointer;
-    position: relative;
+    background: transparent;
     border: none;
-    outline: none;
-    transition: transform 0.3s ease;
-    margin-top: 20rem;
-    margin-right: 60rem;
+    cursor: pointer;
+    margin-top: 30rem;
+    margin-right: 35rem;
+    width: 30rem;
+    height: 30rem;
 }
 
-#restart-btn:hover {
-    animation: move 6s ease infinite, pulse 0.5s ease infinite alternate;
-    transform: scale(1.1);
+#restart-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
 }
 
-#restart-btn:active {
+#restart-btn:hover img {
+    transform: scale(1.05);
+}
+
+#restart-btn:active img {
     transform: scale(0.95);
 }
 
