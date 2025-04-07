@@ -37,14 +37,43 @@ body {
     transform-origin: right bottom;
 }
 
+#you-dead {
+    position: absolute;
+    width: 600px;
+    height: 800px;
+    background-image: url('./assets/img/you_dead.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 50%;
+    margin-right: -750px;
+    bottom: 50px;
+    z-index: 1;
+    animation: float 3s ease-in-out infinite;
+    transform-origin: right bottom;
+}
+
 @keyframes float {
     0%,
     100% {
         transform: translateY(0);
     }
-
     50% {
         transform: translateY(-20px);
+    }
+}
+
+@keyframes float-carlo {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    25% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-25px) rotate(-2deg);
+    }
+    75% {
+        transform: translateY(-15px) rotate(2deg);
     }
 }
 
@@ -76,7 +105,7 @@ body {
     background: transparent;
     border: none;
     cursor: pointer;
-    margin-right: 20rem;
+    margin-right: 30rem;
     width: 20rem;
     height: 20rem;
 }
@@ -368,7 +397,6 @@ body {
     from {
         transform: translateY(-100px) rotate(0deg);
     }
-
     to {
         transform: translateY(calc(100vh + 100px)) rotate(360deg);
     }
@@ -379,7 +407,7 @@ body {
 }
 
 #ending-screen {
-    background-image: url('./assets/img/deadscreen_MiniGame1.png');
+    background-image: url('./assets/img/deathScreen.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
