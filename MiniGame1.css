@@ -1,0 +1,470 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    cursor: crosshair;
+}
+
+#menu {
+    background-image: url("./assets/img/home_background.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#Madeleine-home {
+    position: absolute;
+    width: 600px;
+    height: 800px;
+    background-image: url('./assets/img/Madeleine_home.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    right: 50%;
+    margin-right: -750px;
+    bottom: 50px;
+    z-index: 1;
+    animation: float 3s ease-in-out infinite;
+    transform-origin: right bottom;
+}
+
+#you-dead {
+    position: absolute;
+    width: 600px;
+    height: 800px;
+    background-image: url('./assets/img/you_dead.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 5rem;
+    margin-left: 40rem;
+    z-index: 1;
+    animation: float 3s ease-in-out infinite;
+    transform-origin: right bottom;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes float-carlo {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    25% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(-25px) rotate(-2deg);
+    }
+    75% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+}
+
+#start-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 30rem;
+    margin-right: 30rem;
+    width: 30rem;
+    height: 30rem;
+}
+
+#start-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+#start-btn:hover img {
+    transform: scale(1.05);
+}
+
+#start-btn:active img {
+    transform: scale(0.95);
+}
+
+#credits-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 30rem;
+    width: 20rem;
+    height: 20rem;
+}
+
+#credits-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+#credits-btn:hover img {
+    transform: scale(1.05);
+}
+
+#credits-btn:active img {
+    transform: scale(0.95);
+}
+
+#restart-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-top: 30rem;
+    margin-right: 35rem;
+    width: 30rem;
+    height: 30rem;
+}
+
+#restart-btn img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.2s;
+}
+
+#restart-btn:hover img {
+    transform: scale(1.05);
+}
+
+#restart-btn:active img {
+    transform: scale(0.95);
+}
+
+@keyframes move {
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes pulse {
+    to {
+        transform: translateY(-15px) scale(1.05);
+    }
+}
+
+#animation-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9;
+    color: white;
+    font-size: 2em;
+}
+
+#recipe-selection {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 8;
+}
+
+#recipe-selection h1 {
+    color: #fff;
+    font-size: 3.5em;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
+    font-family: 'Comic Sans MS', cursive;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 30px;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+}
+
+.recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 900px;
+    padding: 20px;
+}
+
+.recipe-option {
+    width: 200px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+}
+
+.recipe-option:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.recipe-image {
+    width: 100%;
+    height: 140px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 15px;
+}
+
+.recipe-title {
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.recipe-difficulty {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FFC107;
+    color: #333;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+#minigame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 7;
+    overflow: hidden;
+    background-image: url(./assets/img/minigame1_background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#tutorial {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#tutorial-box {
+    width: 600px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+#tutorial-character {
+    width: 150px;
+    height: 200px;
+    background-image: url('img/Madeleine1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: -120px;
+    bottom: 0;
+}
+
+#tutorial-text {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    min-height: 120px;
+}
+
+#tutorial-next {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    cursor: pointer;
+    float: right;
+}
+
+#character {
+    position: absolute;
+    right: 100px;
+    bottom: 50px;
+    width: 300px;
+    height: 400px;
+    background-image: url('img/Madeleine.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 2;
+    transition: background-image 0.3s;
+}
+
+.ingredient {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    z-index: 3;
+    display: none;
+    transition: transform 0.2s;
+    background-size: contain;
+    background-position: center;
+}
+
+#score {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#lives {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#ingredients-needed {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    font-size: 1.5em;
+    color: #333;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-100px) rotate(0deg);
+    }
+    to {
+        transform: translateY(calc(100vh + 100px)) rotate(360deg);
+    }
+}
+
+.falling {
+    animation: fall linear forwards;
+}
+
+#ending-screen {
+    background-image: url('./assets/img/deathScreen.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+#credits-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #673AB7 0%, #512DA8 100%);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+    color: white;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+#credits-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 700px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+#credits-content h2 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    color: #FFC107;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+#credits-content p {
+    font-size: 1.5em;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+#credits-content p strong {
+    color: #FFC107;
+}
+
+#back-btn {
+    margin-top: 30px;
+    background: #FFC107;
+    color: #333;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.3em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#back-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    background: #FFD54F;
+}
