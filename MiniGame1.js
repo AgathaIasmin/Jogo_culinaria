@@ -22,25 +22,27 @@ let lives = 3;
 let neededIngredients = {
     'Pão': 2,
     'Queijo': 2,
-    'Hambúrguer': 1
+    'carne': 1,
+    'Tomate': 1
 };
 let collectedIngredients = {
     'Pão': 0,
     'Queijo': 0,
-    'Hambúrguer': 0
+    'carne': 0,
+    'Tomate': 0
 };
-let wrongIngredients = ['Tomate', 'Cebola', 'Alface', 'Bacon', 'Pepino'];
+let wrongIngredients = ['Cebola', 'Alface', 'Bacon', 'Pepino'];
 let activeIngredients = [];
 const maxIngredients = 20;
 let currentTutorialStep = 0;
 let collisionInterval;
-let meggyBlinkInterval;
-let meggyReactionTimeout;
+let MadeleineBlinkInterval;
+let MadeleineReactionTimeout;
 
 const INGREDIENT_IMAGES = {
     'Pão': './assets/img/pao.png',
     'Queijo': './assets/img/queijo.png',
-    'Hambúrguer': './assets/img/hamburguer.png',
+    'carne': './assets/img/carne.png',
     'Tomate': './assets/img/tomate.png',
     'Cebola': './assets/img/cebola.png',
     'Alface': './assets/img/alface.png',
@@ -49,24 +51,24 @@ const INGREDIENT_IMAGES = {
 };
 
 const tutorialSteps = [{
-    text: "Oi chef! Vamos preparar um hambúrguer delicioso?",
-    sprite: "./assets/img/meggy1.png"
+    text: "Oi chef! Vamos preparar um carne delicioso?",
+    sprite: "./assets/img/Madeleine1.png"
 },
 {
     text: "Eu vou jogar os ingredientes continuamente!",
-    sprite: "./assets/img/meggy2.png"
+    sprite: "./assets/img/Madeleine2.png"
 },
 {
-    text: "Precisamos de: 2 pães, 2 queijos e 1 hambúrguer!",
-    sprite: "./assets/img/meggy1.png"
+    text: "Precisamos de: 2 pães, 2 queijos, 1 Tomate e  1 carne!",
+    sprite: "./assets/img/Madeleine1.png"
 },
 {
     text: "Cuidado com os ingredientes errados! 3 erros e você perde!",
-    sprite: "./assets/img/meggy2.png"
+    sprite: "./assets/img/Madeleine2.png"
 },
 {
     text: "Use o mouse para clicar nos ingredientes certos!",
-    sprite: "./assets/img/meggy1.png"
+    sprite: "./assets/img/Madeleine1.png"
 }
 ];
 
@@ -78,21 +80,21 @@ backgroundMusic.muted = true; // inicia mudo.
 
 // Tenta reproduzir o áudio após a interação do usuário
 document.addEventListener('click', function() {
-  backgroundMusic.muted = false;
-  backgroundMusic.play().catch(error => {
-    console.error('Erro ao reproduzir áudio:', error);
-  });
+    backgroundMusic.muted = false;
+    backgroundMusic.play().catch(error => {
+        console.error('Erro ao reproduzir áudio:', error);
+    });
 }, { once: true });
 
 startBtn.addEventListener('click', () => {
     menu.style.display = 'none';
     animationScreen.style.display = 'flex';
-    animateMeggyThrow();
+    animateMadeleineThrow();
 
     setTimeout(() => {
         animationScreen.style.display = 'none';
         recipeSelection.style.display = 'flex';
-        character.style.backgroundImage = 'url(./assets/img/meggy.png)';
+        character.style.backgroundImage = 'url(./assets/img/Madeleine.png)';
     }, 3000);
 });
 
@@ -134,17 +136,18 @@ restartBtn.addEventListener('click', () => {
     collectedIngredients = {
         'Pão': 0,
         'Queijo': 0,
-        'Hambúrguer': 0
+        'carne': 0,
+        'Tomate': 0
     };
     backgroundMusic.play(); // Retoma a música ao reiniciar o jogo
 });
 
 endingScreen.style.display = 'none';
 
-function animateMeggyThrow() {
-    character.style.backgroundImage = 'url(./assets/img/meggy1.png)';
+function animateMadeleineThrow() {
+    character.style.backgroundImage = 'url(./assets/img/Madeleine1.png)';
     setTimeout(() => {
-        character.style.backgroundImage = 'url(./assets/img/meggy3.png)';
+        character.style.backgroundImage = 'url(./assets/img/Madeleine3.png)';
     }, 500);
 }
 
@@ -163,10 +166,11 @@ function startMinigame() {
     collectedIngredients = {
         'Pão': 0,
         'Queijo': 0,
-        'Hambúrguer': 0
+        'carne': 0,
+        'Tomate': 0
     };
 
-    scoreElement.textContent = `Ingredientes: 0/5`;
+    scoreElement.textContent = `Ingredientes: 0/6`;
     livesElement.textContent = `Vidas: 3`;
 
     currentTutorialStep = 0;
@@ -183,22 +187,23 @@ function startGameplay() {
     collectedIngredients = {
         'Pão': 0,
         'Queijo': 0,
-        'Hambúrguer': 0
+        'carne': 0,
+        'Tomate': 0
     };
 
     scoreElement.textContent = `Ingredientes: 0/5`;
     livesElement.textContent = `Vidas: 3`;
 
     playThrowAnimation(() => {
-        character.style.backgroundImage = 'url(./assets/img/meggy.png)';
-        startMeggyBlink();
+        character.style.backgroundImage = 'url(./assets/img/Madeleine.png)';
+        startMadeleineBlink();
         launchMultipleIngredients();
         collisionInterval = setInterval(checkCollisions, 16);
     });
 }
 
 function launchMultipleIngredients() {
-    if (lives <= 0 || score >= 5) return;
+    if (lives <= 0 || score >= Object.values(neededIngredients).reduce((a, b) => a + b, 0)) return;
 
     const totalIngredients = 10 + Math.floor(Math.random() * 6);
 
@@ -212,20 +217,20 @@ function launchMultipleIngredients() {
 }
 
 function playThrowAnimation(callback) {
-    character.style.backgroundImage = 'url(./assets/img/meggy1.png)';
+    character.style.backgroundImage = 'url(./assets/img/Madeleine1.png)';
     setTimeout(() => {
-        character.style.backgroundImage = 'url(./assets/img/meggy3.png)';
+        character.style.backgroundImage = 'url(./assets/img/Madeleine3.png)';
         setTimeout(() => {
             if (callback) callback();
         }, 500);
     }, 500);
 }
 
-function startMeggyBlink() {
-    meggyBlinkInterval = setInterval(() => {
-        character.style.backgroundImage = 'url(./assets/img/meggy4.png)';
+function startMadeleineBlink() {
+    MadeleineBlinkInterval = setInterval(() => {
+        character.style.backgroundImage = 'url(./assets/img/Madeleine4.png)';
         setTimeout(() => {
-            character.style.backgroundImage = 'url(./assets/img/meggy.png)';
+            character.style.backgroundImage = 'url(./assets/img/Madeleine.png)';
         }, 100);
     }, 3000 + Math.random() * 2000);
 }
@@ -296,19 +301,30 @@ function checkCollisions(event) {
 
             if (isCorrect) {
                 collectedIngredients[type]++;
-                score++;
 
-                const totalNeeded = Object.values(neededIngredients).reduce((a, b) => a + b, 0);
-                scoreElement.textContent = `Ingredientes: ${score}/${totalNeeded}`;
-                showMeggyReaction('meggy8.png');
+                // Verifica se pegou mais ingredientes do que o necessário
+                if (collectedIngredients[type] > neededIngredients[type]) {
+                    lives--;
+                    livesElement.textContent = `Vidas: ${lives}`;
+                    showMadeleineReaction('Madeleine6.png');
+                    if (lives <= 0) {
+                        endGame(false);
+                        return; // Importante sair da função para evitar pontuação extra
+                    }
+                } else {
+                    score++;
+                    const totalNeeded = Object.values(neededIngredients).reduce((a, b) => a + b, 0);
+                    scoreElement.textContent = `Ingredientes: ${score}/${totalNeeded}`;
+                    showMadeleineReaction('Madeleine8.png');
 
-                if (score >= totalNeeded) {
-                    endGame(true);
+                    if (score >= totalNeeded) {
+                        endGame(true);
+                    }
                 }
             } else {
                 lives--;
                 livesElement.textContent = `Vidas: ${lives}`;
-                showMeggyReaction(Math.random() < 0.5 ? 'meggy6.png' : 'meggy7.png');
+                showMadeleineReaction(Math.random() < 0.5 ? 'Madeleine6.png' : 'Madeleine7.png');
 
                 if (lives <= 0) {
                     endGame(false);
@@ -319,17 +335,17 @@ function checkCollisions(event) {
     }
 }
 
-function showMeggyReaction(image) {
-    clearTimeout(meggyReactionTimeout);
+function showMadeleineReaction(image) {
+    clearTimeout(MadeleineReactionTimeout);
     character.style.backgroundImage = `url(./assets/img/${image})`;
-    meggyReactionTimeout = setTimeout(() => {
-        character.style.backgroundImage = 'url(./assets/img/meggy.png)';
+    MadeleineReactionTimeout = setTimeout(() => {
+        character.style.backgroundImage = 'url(./assets/img/Madeleine.png)';
     }, 1000);
 }
 
 function endGame(isWin) {
     clearInterval(collisionInterval);
-    clearInterval(meggyBlinkInterval);
+    clearInterval(MadeleineBlinkInterval);
 
     const highestTimeoutId = setTimeout(() => { }, 0);
     for (let i = 0; i < highestTimeoutId; i++) {
@@ -345,7 +361,8 @@ function endGame(isWin) {
         collectedIngredients = {
             'Pão': 0,
             'Queijo': 0,
-            'Hambúrguer': 0
+            'carne': 0,
+            'Tomate': 0
         };
     } else {
         minigame.style.display = 'none';
