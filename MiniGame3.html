@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Montagem do Hambúrguer</title>
+    <style>
+        :root {
+            --main-bg: linear-gradient(135deg, #ffe0ec 0%, #fff8e1 100%);
+            --panel-bg: rgba(255,255,255,0.85);
+            --panel-border: #f5e1c8;
+            --accent: #ffb6b9;
+            --accent2: #ffecb3;
+            --shadow: 0 8px 32px rgba(255,182,185,0.10), 0 2px 8px 0 rgba(0,0,0,0.10);
+            --ticket-shadow: 0 4px 16px 0 #ffb6b9;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            background-image: url(./assets/img/minigame_background.png);
+            background-size: auto;
+            background-repeat: repeat;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+        #ticket-objective {
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            z-index: 30;
+            width: 210px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            filter: drop-shadow(var(--ticket-shadow));
+        }
+        #ticket-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        #ticket-text {
+            position: absolute;
+            top: 2.2rem;
+            right: -8px;
+            width: 100%;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            z-index: 2;
+            text-align: center;
+            color: #a67c52;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 1.08em;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff, 0 2px 8px #f5e1c8;
+            pointer-events: none;
+            padding: 0 10px;
+            line-height: 1.1;
+            background: none;
+        }
+        #ticket-text ul {
+            margin: 8px 0 0 0;
+            padding: 0 0 0 18px;
+        }
+        #ticket-text li {
+            font-weight: normal;
+            margin-bottom: 2px;
+        }
+        #lives-panel {
+            margin-top: 2px;
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            filter: drop-shadow(0 1px 0 #fff);
+        }
+        #progress-bar-bg {
+            width: 90%;
+            height: 12px;
+            background: #ffe0ec;
+            border-radius: 8px;
+            margin: 8px auto 0 auto;
+            overflow: hidden;
+            border: 1.5px solid #ffb6b9;
+            box-shadow: 0 1px 4px #ffb6b9;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffb6b9, #ffecb3 80%);
+            border-radius: 8px;
+            transition: width 0.3s;
+        }
+        #timer-panel {
+            margin-top: 6px;
+            font-size: 1.1em;
+            color: #b85c00;
+            font-weight: bold;
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 2px 12px;
+            box-shadow: 0 1px 4px #ffecb3;
+            display: inline-block;
+        }
+        #game-area {
+            margin-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+        }
+        #ingredients {
+            display: flex;
+            gap: 28px;
+            margin-bottom: 40px;
+            background: var(--panel-bg);
+            border: 3px solid var(--panel-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 18px 32px;
+            min-width: 340px;
+            justify-content: center;
+        }
+        .ingredient {
+            width: 90px;
+            height: 90px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2.5px solid #ffb6b9;
+            border-radius: 18px;
+            cursor: grab;
+            box-shadow: 0 2px 8px #ffb6b9;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #fff8e1;
+            position: relative;
+        }
+        .ingredient:active {
+            transform: scale(1.13) rotate(-5deg);
+            box-shadow: 0 4px 16px #ffb6b9;
+        }
+        .highlight {
+            outline: 3px solid #ffecb3;
+            box-shadow: 0 0 16px 4px #ffecb3, 0 2px 8px #ffb6b9;
+            transform: scale(1.14);
+            z-index: 2;
+        }
+        #burger-area {
+            width: 260px;
+            height: 400px;
+            background: var(--panel-bg);
+            border: 4px solid var(--panel-border);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            box-shadow: var(--shadow);
+            margin-bottom: 18px;
+        }
+        .stacked-ingredient {
+            width: 200px;
+            height: 60px;
+            margin-bottom: -22px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 1;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 2px 8px #ffb6b9);
+        }
+        .falling {
+            animation: fall 0.5s cubic-bezier(.5,1.7,.5,1) forwards;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-120px) scale(1.2); opacity: 0.7;}
+            80% { transform: translateY(10px) scale(1.05);}
+            100% { transform: translateY(0) scale(1);}
+        }
+        #success-message {
+            display: none;
+            font-size: 2.2em;
+            color: #ffb6b9;
+            margin-top: 30px;
+            animation: pop 1s;
+            text-shadow: 1px 1px 0 #fff, 0 2px 8px #ffecb3;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        .shake {
+            animation: shake 0.4s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+        .glow {
+            box-shadow: 0 0 16px 4px #ffecb3;
+            transition: box-shadow 0.3s;
+        }
+        #restart-btn {
+            margin-top: 30px;
+            padding: 12px 36px;
+            font-size: 1.3em;
+            background: linear-gradient(90deg, #ffb6b9, #ffecb3 80%);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            box-shadow: 0 2px 8px #ffb6b9;
+            display: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #restart-btn:hover {
+            background: linear-gradient(90deg, #ffecb3 10%, #ffb6b9 90%);
+            transform: scale(1.05);
+        }
+        /* Responsivo */
+        @media (max-width: 700px) {
+            #ticket-objective { left: 50%; top: 12px; transform: translateX(-50%); }
+            #game-area { margin-top: 110px; }
+            #ingredients { min-width: 0; flex-wrap: wrap; gap: 16px; padding: 10px 4px; }
+            #burger-area { width: 98vw; max-width: 320px; }
+        }
+        @media (max-width: 500px) {
+            #ticket-objective { width: 98vw; left: 1vw; }
+            #ingredients { min-width: 0; flex-wrap: wrap; gap: 10px; }
+            .ingredient { width: 70px; height: 70px; }
+            #burger-area { width: 98vw; max-width: 220px; }
+        }
+        /* TELA DE START */
+        #start-screen3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('./assets/img/home_background.png') center/cover no-repeat, #fff;
+            z-index: 100;
+            animation: fadeIn 1s;
+        }
+        #madeleine-corner3 {
+            position: absolute;
+            right: 3vw;
+            bottom: 3vh;
+            width: 18vw;
+            min-width: 180px;
+            max-width: 300px;
+            height: auto;
+            z-index: 101;
+            filter: drop-shadow(0 6px 16px #f5e1c8);
+            animation: float 2.5s ease-in-out infinite;
+        }
+        .start-panel3 {
+            background: rgba(255,255,255,0.98);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 2.5em 2.5em 2em 2.5em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            max-width: 90vw;
+            border: 3px solid #f5e1c8;
+            animation: popIn 0.8s;
+        }
+        .madeleine-speech3 {
+            color: #a67c52;
+            font-size: 1.15em;
+            background: #fff8e1;
+            border-radius: 16px;
+            padding: 0.7em 1.2em;
+            margin-bottom: 1.5em;
+            box-shadow: 0 2px 8px rgba(245,225,200,0.12);
+            text-align: center;
+            border: 2px solid #f5e1c8;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+        }
+        #start-minigame3-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 10em;
+            height: 10em;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            padding: 0;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+        #start-minigame3-btn img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #start-minigame3-btn:hover img {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        #start-minigame3-btn:active img {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes slideUp {
+            to { opacity: 1; }
+        }
+        /* TELA DE TUTORIAL */
+        #tutorial3 {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 101;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #tutorial3-box {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 2em 2.5em 2em 2.5em;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-width: 340px;
+            max-width: 90vw;
+            border: 3px solid #f5e1c8;
+            position: relative;
+        }
+        #tutorial3-madeleine {
+            width: 120px;
+            height: auto;
+            margin-right: 24px;
+        }
+        #tutorial3-text {
+            font-size: 1.2em;
+            color: #a67c52;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            margin-bottom: 1em;
+            min-width: 220px;
+            max-width: 340px;
+        }
+        #tutorial3-next {
+            background: #ffb6b9;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 28px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            margin-left: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #tutorial3-next:hover {
+            background: #ffecb3;
+            color: #a67c52;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Start -->
+    <div id="start-screen3">
+        <img id="madeleine-corner3" src="./assets/img/Madeleine_home.png" alt="Madeleine">
+        <div class="start-panel3">
+            <p class="madeleine-speech3">Oi! Pronto para montar o hambúrguer na ordem certa?</p>
+            <button id="start-minigame3-btn">
+                <img src="./assets/img/startButton.png" alt="Começar">
+            </button>
+        </div>
+    </div>
+    <!-- Tela de Tutorial -->
+    <div id="tutorial3">
+        <div id="tutorial3-box">
+            <img id="tutorial3-madeleine" src="./assets/img/Madeleine1.png" alt="Madeleine">
+            <div>
+                <div id="tutorial3-text">Arraste os ingredientes na ordem certa para montar o hambúrguer!</div>
+                <button id="tutorial3-next">Próximo</button>
+            </div>
+        </div>
+    </div>
+    <!-- Madeleine decorativa no canto -->
+    <img id="madeleine-corner3" src="./assets/img/Madeleine_home.png" alt="Madeleine" style="display:none;">
+    <!-- Tela do Jogo -->
+    <div id="ticket-objective">
+        <img src="./assets/img/ticket.png" alt="Ticket" id="ticket-img">
+        <div id="ticket-text">
+            <div>Monte o hambúrguer na ordem:</div>
+            <ul>
+                <li>Pão: <span id="score-pao">0</span>/2</li>
+                <li>Queijo: <span id="score-queijo">0</span>/1</li>
+                <li>Carne: <span id="score-carne">0</span>/2</li>
+                <li>Tomate: <span id="score-tomate">0</span>/1</li>
+            </ul>
+            <div id="lives-panel"></div>
+            <div id="progress-bar-bg"><div id="progress-bar"></div></div>
+            <div id="timer-panel"></div>
+        </div>
+    </div>
+    <div id="game-area">
+        <div id="ingredients"></div>
+        <div id="burger-area"></div>
+        <div id="success-message">🍔 Hambúrguer Pronto!</div>
+        <button id="restart-btn">Reiniciar</button>
+    </div>
+    <audio id="success-sound" src="./assets/audio/success.mp3"></audio>
+    <audio id="error-sound-pao" src="./assets/audio/error_pao.mp3"></audio>
+    <audio id="error-sound-queijo" src="./assets/audio/error_queijo.mp3"></audio>
+    <audio id="error-sound-carne" src="./assets/audio/error_carne.mp3"></audio>
+    <audio id="error-sound-tomate" src="./assets/audio/error_tomate.mp3"></audio>
+    <script>
+        // Ingredientes na ordem correta
+        const correctOrder = [
+            { name: 'Pão', img: './assets/img/pao.png' },
+            { name: 'carne', img: './assets/img/carne.png' },
+            { name: 'Queijo', img: './assets/img/queijo.png' },
+            { name: 'carne', img: './assets/img/carne.png' },
+            { name: 'Tomate', img: './assets/img/tomate.png' },
+            { name: 'Pão', img: './assets/img/pao.png' }
+        ];
+
+        let neededIngredients = {
+            'Pão': 2,
+            'Queijo': 1,
+            'carne': 2,
+            'Tomate': 1
+        };
+
+        let lives = 3;
+        let stack = [];
+        let timer = 30; // segundos
+        let timerInterval = null;
+        const maxLives = 3;
+
+        const ingredientsDiv = document.getElementById('ingredients');
+        const burgerArea = document.getElementById('burger-area');
+        const progressBar = document.getElementById('progress-bar');
+        const livesPanel = document.getElementById('lives-panel');
+        const timerPanel = document.getElementById('timer-panel');
+
+        function updateLives() {
+            livesPanel.textContent = '❤️'.repeat(lives) + '🤍'.repeat(maxLives - lives);
+        }
+
+        function updateProgress() {
+            const percent = (stack.length / correctOrder.length) * 100;
+            progressBar.style.width = percent + '%';
+        }
+
+        function updateTimer() {
+            timerPanel.textContent = `⏰ ${timer}s`;
+        }
+
+        function startTimer() {
+            timer = 30;
+            updateTimer();
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimer();
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    setTimeout(() => {
+                        alert('Tempo esgotado! Tente novamente.');
+                        restartGame();
+                    }, 200);
+                }
+            }, 1000);
+        }
+
+        function resetIngredients() {
+            ingredientsDiv.innerHTML = '';
+            Object.entries(neededIngredients).forEach(([name, qty]) => {
+                for (let i = 0; i < qty; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'ingredient';
+                    div.draggable = true;
+                    div.dataset.name = name;
+                    div.style.backgroundImage = `url('./assets/img/${name.toLowerCase()}.png')`;
+                    // Arrastar com preview customizado
+                    div.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('ingredient', name);
+                        // Cria imagem customizada para arrastar
+                        const img = new Image();
+                        img.src = `./assets/img/${name.toLowerCase()}.png`;
+                        img.width = 60;
+                        img.height = 60;
+                        e.dataTransfer.setDragImage(img, 30, 30);
+                        setTimeout(() => div.style.opacity = '0.5', 0);
+                    });
+                    div.addEventListener('dragend', () => {
+                        div.style.opacity = '1';
+                    });
+                    ingredientsDiv.appendChild(div);
+                }
+            });
+            highlightNextIngredient();
+        }
+
+        function highlightNextIngredient() {
+            const next = correctOrder[stack.length]?.name;
+            [...ingredientsDiv.children].forEach(div => {
+                if (div.dataset.name === next) {
+                    div.classList.add('highlight');
+                } else {
+                    div.classList.remove('highlight');
+                }
+            });
+        }
+
+        burgerArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            burgerArea.style.background = '#ffe0b2';
+        });
+        burgerArea.addEventListener('dragleave', () => {
+            burgerArea.style.background = '#fff8e1';
+        });
+        burgerArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            burgerArea.style.background = '#fff8e1';
+            const name = e.dataTransfer.getData('ingredient');
+            const ingDiv = [...ingredientsDiv.children].find(div => div.dataset.name === name);
+            if (ingDiv) {
+                const expected = correctOrder[stack.length].name;
+                if (name === expected) {
+                    ingredientsDiv.removeChild(ingDiv);
+                    stack.push(name);
+                    // Animação de queda
+                    const stacked = document.createElement('div');
+                    stacked.className = 'stacked-ingredient falling glow';
+                    stacked.style.backgroundImage = `url('./assets/img/${name.toLowerCase()}.png')`;
+                    burgerArea.appendChild(stacked);
+                    setTimeout(() => {
+                        stacked.classList.remove('falling');
+                        stacked.classList.remove('glow');
+                    }, 500);
+                    playSound('success', name);
+                    updateProgress();
+                    highlightNextIngredient();
+                    checkSuccess();
+                } else {
+                    burgerArea.classList.add('shake');
+                    playSound('error', name);
+                    lives--;
+                    updateLives();
+                    if (lives <= 0) {
+                        setTimeout(() => {
+                            alert('Você perdeu! Tente novamente.');
+                            restartGame();
+                        }, 300);
+                    }
+                    setTimeout(() => burgerArea.classList.remove('shake'), 400);
+                }
+            }
+        });
+
+        function checkSuccess() {
+            if (stack.length === correctOrder.length) {
+                const isCorrect = stack.every((name, i) => name === correctOrder[i].name);
+                if (isCorrect) {
+                    document.getElementById('success-message').style.display = 'block';
+                    playSound('success');
+                    clearInterval(timerInterval);
+                    setTimeout(() => {
+                        burgerArea.innerHTML = '';
+                        const ready = document.createElement('img');
+                        ready.src = './assets/img/hamburguer.png';
+                        ready.style.width = '180px';
+                        ready.style.marginTop = '60px';
+                        ready.style.animation = 'pop 1s';
+                        burgerArea.appendChild(ready);
+                        setTimeout(() => {
+                            window.location.href = 'MiniGame4.html';
+                        }, 1500);
+                    }, 1200);
+                } else {
+                    setTimeout(() => {
+                        alert('Ordem errada! Tente novamente.');
+                        restartGame();
+                    }, 300);
+                }
+            }
+        }
+
+        function playSound(type, name) {
+            if (type === 'success') {
+                document.getElementById('success-sound').currentTime = 0;
+                document.getElementById('success-sound').play();
+            } else if (type === 'error') {
+                // Som diferente para cada ingrediente
+                let id = 'error-sound-' + (name ? name.toLowerCase() : 'pao');
+                const audio = document.getElementById(id) || document.getElementById('error-sound-pao');
+                audio.currentTime = 0;
+                audio.play();
+            }
+        }
+
+        function restartGame() {
+            stack = [];
+            lives = maxLives;
+            updateLives();
+            updateProgress();
+            burgerArea.innerHTML = '';
+            document.getElementById('success-message').style.display = 'none';
+            resetIngredients();
+            startTimer();
+        }
+
+        document.getElementById('restart-btn').addEventListener('click', restartGame);
+
+        // Inicialização
+        updateLives();
+        updateProgress();
+        resetIngredients();
+        startTimer();
+
+        // --- TELA DE START E TUTORIAL ---
+        const startScreen3 = document.getElementById('start-screen3');
+        const tutorial3 = document.getElementById('tutorial3');
+        const tutorial3Text = document.getElementById('tutorial3-text');
+        const tutorial3Madeleine = document.getElementById('tutorial3-madeleine');
+        const tutorial3Next = document.getElementById('tutorial3-next');
+        const startMinigame3Btn = document.getElementById('start-minigame3-btn');
+        const madeleineCorner3 = document.getElementById('madeleine-corner3');
+
+        const tutorialSteps3 = [
+            { text: "Arraste os ingredientes para o hambúrguer, na ordem do ticket!", img: "./assets/img/Madeleine1.png" },
+            { text: "Só pode colocar o ingrediente certo na vez certa!", img: "./assets/img/Madeleine2.png" },
+            { text: "Se errar, você perde uma vida. Se acabar o tempo, também!", img: "./assets/img/Madeleine3.png" },
+            { text: "Monte o hambúrguer igual ao pedido para vencer!", img: "./assets/img/Madeleine1.png" }
+        ];
+        let currentStep3 = 0;
+
+        function showTutorial3Step() {
+            tutorial3Text.textContent = tutorialSteps3[currentStep3].text;
+            tutorial3Madeleine.src = tutorialSteps3[currentStep3].img;
+        }
+
+        startMinigame3Btn.onclick = function() {
+            startScreen3.style.display = 'none';
+            tutorial3.style.display = 'flex';
+            currentStep3 = 0;
+            showTutorial3Step();
+        };
+
+        tutorial3Next.onclick = function() {
+            currentStep3++;
+            if (currentStep3 < tutorialSteps3.length) {
+                showTutorial3Step();
+            } else {
+                tutorial3.style.display = 'none';
+                document.getElementById('ticket-objective').style.display = '';
+                document.getElementById('game-area').style.display = '';
+                madeleineCorner3.style.display = 'block';
+            }
+        };
+
+        // Esconde o jogo até passar pelo start/tutorial
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('ticket-objective').style.display = 'none';
+            document.getElementById('game-area').style.display = 'none';
+            startScreen3.style.display = 'flex';
+            tutorial3.style.display = 'none';
+            madeleineCorner3.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

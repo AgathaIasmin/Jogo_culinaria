@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/Madeleine_favicon.png" type="image/png">
+    <title>Cook & Fire</title>
+    <style>
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background-color: #f5f5f5;
+            cursor: crosshair;
+            background-image: url("./assets/img/minigame_background.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        #menu {
+            background-image: url("./assets/img/home_background.png");
+            background-size: auto;
+            background-repeat: repeat;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            overflow: hidden;
+            animation: scrollDiagonal 40s linear infinite;
+        }
+        
+        #Madeleine-home {
+            position: absolute;
+            width: 50rem;
+            height: 50rem;
+            background-image: url('./assets/img/Madeleine_home.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-left: 85rem;
+            top: 10rem;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+            transform-origin: right bottom;
+        }
+        
+        #logo {
+            margin-right: 100rem;
+            margin-top: 5rem;
+            width: 10px;
+            position: relative;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+        
+        #start-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 30rem;
+            margin-top: 5rem;
+            width: 35rem;
+            height: 35rem;
+            position: relative;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+        
+        #start-btn img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #start-btn:hover img {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        #start-btn:active img {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        
+        #credits-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 30rem;
+            width: 25rem;
+            height: 25rem;
+            margin-top: 2rem;
+            position: relative;
+            bottom: -100px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.8s forwards;
+        }
+        
+        #credits-btn img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #credits-btn:hover img {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        #credits-btn:active img {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        
+        @keyframes slideUp {
+            to {
+                bottom: 0;
+                opacity: 1;
+            }
+        }
+        
+        #restart-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            margin-top: 30rem;
+            margin-right: 35rem;
+            width: 35rem;
+            height: 35rem;
+        }
+        
+        #restart-btn img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+        }
+        
+        #restart-btn:hover img {
+            transform: scale(1.05);
+        }
+        
+        #restart-btn:active img {
+            transform: scale(0.95);
+        }
+        
+        @keyframes move {
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+        
+        @keyframes pulse {
+            to {
+                transform: translateY(-15px) scale(1.05);
+            }
+        }
+        
+        #victory-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 15;
+            color: white;
+            font-family: 'Comic Sans MS', cursive;
+            text-align: center;
+            animation: scrollDiagonal 40s linear infinite;
+        }
+        
+        #victory-screen::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+        
+        #victory-screen h2 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+            animation: pulse 1.5s infinite;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 40px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        #victory-screen p {
+            font-size: 2em;
+            margin: 10px 0;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 30px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        #transition-message {
+            font-size: 2.5em;
+            margin-top: 30px;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+        
+        #next-game-btn {
+            margin-top: 40px;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #next-game-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transition: 0.5s;
+        }
+        
+        #next-game-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #next-game-btn:hover::before {
+            left: 100%;
+        }
+        
+        #next-game-btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+        
+        #minigame2-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            background: url('./assets/img/home_background.png') center/cover no-repeat, #fff;
+            z-index: 15;
+            box-shadow: 0 0 0 100vw rgba(0,0,0,0.08) inset;
+        }
+        
+        #ticket-objective {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            z-index: 30;
+            width: 170px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        
+        #ticket-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        #ticket-text {
+            position: absolute;
+            top: 2rem;
+            right: -8px;
+            width: 100%;
+            height: 85px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            text-align: center;
+            color: #4e2e0e;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 1em;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff, 0 2px 8px #f5e1c8;
+            pointer-events: none;
+            padding: 0 10px;
+            line-height: 1.1;
+            background: none;
+        }
+        
+        #game-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 60px 1fr 150px;
+            gap: 1.5vw;
+            width: 95vw;
+            height: 90vh;
+            background: rgba(255,255,255,0.97);
+            border-radius: 32px 32px 24px 24px;
+            box-shadow:
+                0 16px 40px 8px rgba(80,60,30,0.18),
+                0 2px 8px 0 rgba(0,0,0,0.10),
+                0 0 0 8px #f5e1c8 inset;
+            padding: 1.5vw;
+            margin: 4vh auto 2vh auto;
+            position: relative;
+            border: 3px solid #f5e1c8;
+            perspective: 1200px;
+        }
+        
+        #top-wall {
+            grid-row: 1;
+            background-image: url("./assets/img/mini_background.png");
+            background-size: auto;
+            background-repeat: repeat;
+            height: 100%;
+            width: 100%;
+            box-shadow: 0 4px 16px 0 rgba(80,60,30,0.10);
+            position: relative;
+            z-index: 1;
+            border-radius: 16px 16px 0 0;
+            border-bottom: 2px solid #f5e1c8;
+        }
+        
+        #grill-station {
+            grid-row: 2;
+            background: linear-gradient(145deg, #fff8e1 60%, #e0c9a6 100%);
+            border-radius: 24px;
+            position: relative;
+            overflow: visible;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin: 0 2vw;
+            box-shadow:
+                0 12px 32px 0 rgba(80,60,30,0.18),
+                0 2px 8px 0 rgba(0,0,0,0.08);
+            border: 2px solid #f5e1c8;
+            transform: perspective(800px) rotateX(8deg);
+        }
+        
+        #chapa {
+            width: 95%;
+            height: 90%;
+            position: relative;
+            border-radius: 20px;
+            background: linear-gradient(160deg, #fff 60%, #e0c9a6 100%);
+            box-shadow:
+                0 8px 32px 0 rgba(80,60,30,0.18),
+                0 2px 8px 0 rgba(0,0,0,0.08),
+                0 0 0 4px #f5e1c8 inset;
+            border: 4px solid #f5e1c8;
+            transform: perspective(800px) rotateX(4deg);
+        }
+        
+        .bottom-area {
+            grid-row: 3;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 4vw;
+            height: 100%;
+            background: linear-gradient(180deg, #fff8e1 80%, #e0c9a6 100%);
+            border-radius: 0 0 24px 24px;
+            border-top: 2px solid #f5e1c8;
+            box-shadow: 0 -4px 24px 0 rgba(80,60,30,0.10) inset;
+            transform: perspective(800px) rotateX(6deg);
+            gap: 40px;
+        }
+        
+        #patty-stack-area,
+        #trash-area,
+        #finished-burgers {
+            margin: 0 10px;
+        }
+        
+        #patty-stack-area {
+            width: 180px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+        }
+        
+        #patty-stack-visual {
+            background: #fff8e1;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px 0 rgba(80,60,30,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            user-select: none;
+        }
+        
+        #patty-stack-visual img {
+            width: 80%;
+            height: auto;
+            max-width: 80px;
+            transition: transform 0.2s;
+            pointer-events: none;
+        }
+        
+        #removal-area, #trash-area {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #removal-area h3, #trash-area h3, #finished-burgers h3 {
+            color: #ff9800;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            text-align: center;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            text-shadow: 1px 1px 0 #fff;
+        }
+        
+        #trash-area {
+            background-image: url('./assets/img/lixeira.png');
+            background-size: 60%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        #finished-burgers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+            background: #fff8e1;
+            border-radius: 18px;
+            border: 2px solid #f5e1c8;
+            box-shadow: 0 4px 12px 0 rgba(80,60,30,0.08);
+        }
+        
+        .patty-wrapper {
+            position: absolute;
+            width: 100px;
+            height: 80px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 10;
+        }
+        
+        .patty-on-grill {
+            width: 100%;
+            height: 100%;
+            background-image: url('./assets/img/carne_deitada.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s ease;
+            border-radius: 18px;
+            border: 2px solid #f5e1c8;
+            background-color: #fff8e1;
+            box-shadow: 0 4px 16px 0 rgba(80,60,30,0.10);
+        }
+        
+        .patty-on-grill.burnt {
+            filter: brightness(0.45) contrast(1.2) grayscale(0.3);
+        }
+        
+        .cooked-patty {
+            width: 80px;
+            height: 65px;
+            background-color: #f5e1c8;
+            border-radius: 40%;
+            filter: brightness(0.97);
+            margin: 5px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px #f5e1c8, 0 8px 16px 0 rgba(80,60,30,0.10);
+        }
+        
+        .cooking-progress {
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-color: #fff8e1;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #f5e1c8;
+        }
+        
+        .cooking-progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(to right, #fff9c4, #ffecb3);
+            transition: width 0.1s linear;
+            border-radius: 5px;
+        }
+        
+        .flip-warning {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff9800;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            animation: pulse 1s infinite;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            box-shadow: 0 2px 8px #f5e1c8;
+        }
+        
+        .ready-notification {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff9800;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+            animation: readyPulse 1.5s infinite;
+            box-shadow: 0 0 10px #f5e1c8;
+            z-index: 20;
+            pointer-events: none;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+        }
+        
+        .drag-over {
+            background: rgba(255, 255, 255, 0.2) !important;
+            transform: scale(1.05);
+        }
+        
+        .dragging {
+            opacity: 0.7;
+            transform: scale(0.95);
+            z-index: 100;
+        }
+        
+        .success-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #4CAF50;
+            animation: successPulse 0.5s ease-out;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        @keyframes readyPulse {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+        
+        .drag-over-patty {
+            background-color: #808080;
+        }
+        
+        .steam {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            top: -40px;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .steam::before,
+        .steam::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: steam 2s infinite;
+        }
+        
+        .steam::before {
+            left: 20%;
+        }
+        
+        .steam::after {
+            left: 70%;
+        }
+        
+        @keyframes steam {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+        
+            50% {
+                opacity: 0.6;
+            }
+        
+            100% {
+                transform: translateY(-20px) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .patty-wrapper[data-cooking-state="side1"] .steam,
+        .patty-wrapper[data-cooking-state="side2"] .steam {
+            opacity: 1;
+        }
+        
+        .chapa-highlight {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--x) var(--y),
+                    rgba(255, 255, 255, 0.1) 0%,
+                    transparent 50%);
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .drag-over {
+            background: rgba(255, 255, 255, 0.2) !important;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+        
+        .patty-wrapper[data-cooking-state="cooked"] {
+            cursor: grab;
+            user-select: none;
+            transform: translateZ(50px);
+            pointer-events: auto;
+        }
+        
+        .patty-wrapper.dragging {
+            opacity: 0.7;
+            transform: scale(0.95) translateZ(50px);
+            z-index: 100;
+            pointer-events: auto;
+        }
+        
+        .patty-wrapper[data-cooking-state="cooked"]:hover {
+            transform: scale(1.05) translateZ(50px);
+            pointer-events: auto;
+        }
+        
+        .ready-notification::before {
+            content: '✓';
+            margin-right: 5px;
+            font-size: 18px;
+        }
+        
+        #start-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('./assets/img/home_background.png') center/cover no-repeat, #fff;
+            z-index: 100;
+            animation: fadeIn 1s;
+        }
+        
+        #madeleine-corner {
+            position: absolute;
+            right: 3vw;
+            bottom: 3vh;
+            width: 18vw;
+            min-width: 180px;
+            max-width: 300px;
+            height: auto;
+            z-index: 101;
+            filter: drop-shadow(0 6px 16px #f5e1c8);
+            animation: float 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0);}
+            50% { transform: translateY(-12px);}
+        }
+        
+        .start-panel {
+            background: rgba(255,255,255,0.98);
+            border-radius: 32px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 2.5em 2.5em 2em 2.5em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            max-width: 90vw;
+            animation: popIn 0.8s;
+            border: 3px solid #f5e1c8;
+        }
+        
+        #start-screen h1 {
+            color: #ff9800;
+            font-size: 2em;
+            margin-bottom: 0.7em;
+            text-align: center;
+            text-shadow: 1px 1px 0 #fff, 2px 2px 8px #f5e1c8;
+        }
+        
+        .madeleine-speech {
+            color: #a67c52;
+            font-size: 1.15em;
+            background: #fff8e1;
+            border-radius: 16px;
+            padding: 0.7em 1.2em;
+            margin-bottom: 1.5em;
+            box-shadow: 0 2px 8px rgba(245,225,200,0.12);
+            text-align: center;
+            border: 2px solid #f5e1c8;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+        }
+        
+        #start-minigame-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 10em;
+            height: 10em;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;
+            box-shadow: none;
+            padding: 0;
+        }
+        
+        #start-minigame-btn img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.2s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #start-minigame-btn:hover img {
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        #start-minigame-btn:active img {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        
+        @keyframes slideUp {
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            80% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        
+        #gameover-screen {
+            background-image: url('./assets/img/deathScreen.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        #you-dead {
+            position: absolute;
+            width: 600px;
+            height: 800px;
+            background-image: url('./assets/img/you_dead.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-top: 5rem;
+            margin-left: 40rem;
+            z-index: 1;
+            animation: float 3s ease-in-out infinite;
+            transform-origin: right bottom;
+        }
+        
+        #tutorial2 {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 101;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #tutorial2-box {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+            padding: 2em 2.5em 2em 2.5em;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-width: 340px;
+            max-width: 90vw;
+            border: 3px solid #f5e1c8;
+            position: relative;
+        }
+        #tutorial2-madeleine {
+            width: 120px;
+            height: auto;
+            margin-right: 24px;
+        }
+        #tutorial2-text {
+            font-size: 1.2em;
+            color: #a67c52;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            margin-bottom: 1em;
+            min-width: 220px;
+            max-width: 340px;
+        }
+        #tutorial2-next {
+            background: #ffb6b9;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 28px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            margin-left: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #tutorial2-next:hover {
+            background: #ffecb3;
+            color: #a67c52;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Tutorial MiniGame2 -->
+    <div id="tutorial2" style="display:none;">
+        <div id="tutorial2-box">
+            <img id="tutorial2-madeleine" src="./assets/img/Madeleine1.png" alt="Madeleine">
+            <div>
+                <div id="tutorial2-text">Arraste as carnes para a chapa para começar a fritar!</div>
+                <button id="tutorial2-next">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela de início personalizada -->
+    <div id="start-screen">
+        <img id="madeleine-corner" src="./assets/img/Madeleine_home.png" alt="Madeleine">
+        <div class="start-panel">
+            <p class="madeleine-speech">Oi! Pronto para começar a fritar o hamburguer?</p>
+            <button id="start-minigame-btn">
+                <img src="./assets/img/startButton.png" alt="Começar">
+            </button>
+        </div>
+    </div>
+
+    <div id="victory-screen">
+        <h2>Parabéns!</h2>
+        <p>Você completou a fase!</p>
+    </div>
+
+    <div id="gameover-screen" style="display: none;">
+        <div id="you-dead"></div>
+        <button id="restart-btn">
+            <img src="./assets/img/restartButton.png">
+        </button>
+    </div>
+
+    <div id="minigame2-screen" style="display: none;">
+        <div id="ticket-objective">
+            <img src="./assets/img/ticket.png" alt="Ticket" id="ticket-img">
+            <div id="ticket-text">
+                Frite <br>
+                2 carnes <br>
+                e coloque <br>
+                nos prontos
+            </div>
+        </div>
+        <div id="game-container">
+            <div id="top-wall"></div>
+            <div id="grill-station">
+                <div id="chapa"></div>
+            </div>
+            <div class="bottom-area">
+                <div id="patty-stack-area">
+                    <div id="patty-stack-visual" draggable="true">
+                        <img src="./assets/img/carne_deitada.png" alt="carne_deitada">
+                    </div>
+                </div>
+                <button id="pronto-btn" style="height: 60px; align-self: center; font-size: 1.2em; background: #ff9800; color: #fff; border: none; border-radius: 16px; padding: 0 30px; margin: 0 20px; cursor: pointer; font-family: 'Comic Sans MS', cursive;">
+                    Pronto!
+                </button>
+                <div id="trash-area">
+                    <h3>Lixeira</h3>
+                </div>
+                <div id="finished-burgers">
+                    <h3>Hambúrgueres Prontos</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let victoryScreen = document.getElementById('victory-screen');
+        let minigame2Screen = document.getElementById('minigame2-screen');
+        let chapa = document.getElementById('chapa');
+        let pattyStack = document.getElementById('patty-stack-visual');
+        let trashArea = document.getElementById('trash-area');
+        let startScreen = document.getElementById('start-screen');
+        let startMinigameBtn = document.getElementById('start-minigame-btn');
+        let finishedBurgers = document.getElementById('finished-burgers');
+        
+        let activePatties = [];
+        let cookingPatties = [];
+        let cookedPatties = [];
+        let burntPatties = [];
+        let isDragging = false;
+        let currentPatty = null;
+        let cookingTimers = new Map();
+        let gameScore = 0;
+        let gameLives = 3;
+        
+        const backgroundMusic = new Audio('./assets/audio/joyful.mp3');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.muted = true;
+        
+        document.addEventListener('click', function() {
+            backgroundMusic.muted = false;
+            backgroundMusic.play().catch(error => {
+                console.error('Erro ao reproduzir áudio:', error);
+            });
+        }, { once: true });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            minigame2Screen.style.display = 'none';
+            tutorial2.style.display = 'none';
+
+            startMinigameBtn.addEventListener('click', function() {
+                startScreen.style.display = 'none';
+                minigame2Screen.style.display = 'flex';
+                tutorial2.style.display = 'flex';
+                currentStep2 = 0;
+                showTutorial2Step();
+            });
+
+            tutorial2Next.onclick = function() {
+                currentStep2++;
+                if (currentStep2 < tutorialSteps2.length) {
+                    showTutorial2Step();
+                } else {
+                    tutorial2.style.display = 'none';
+                    initializeMiniGame2();
+                }
+            };
+        });
+        
+        pattyStack.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', 'patty');
+            pattyStack.style.opacity = '0.5';
+        });
+        
+        pattyStack.addEventListener('dragend', (e) => {
+            pattyStack.style.opacity = '1';
+        });
+        
+        chapa.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            chapa.classList.add('drag-over');
+        });
+        
+        chapa.addEventListener('dragleave', () => {
+            chapa.classList.remove('drag-over');
+        });
+        
+        chapa.addEventListener('drop', (e) => {
+            e.preventDefault();
+            chapa.classList.remove('drag-over');
+            if (e.dataTransfer.getData('text/plain') === 'patty') {
+                const patty = createPattyOnGrill();
+                const rect = chapa.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                patty.style.left = `${x - 60}px`;
+                patty.style.top = `${y - 50}px`;
+                chapa.appendChild(patty);
+                activePatties.push(patty);
+                startCooking(patty);
+            }
+        });
+        
+        const PATTY_IMAGES = {
+            raw: './assets/img/carne_deitada.png',
+            cooking: './assets/img/carne_deitada.png',
+            cooked: './assets/img/carne_deitada.png',
+            burnt: './assets/img/carne_deitada.png',
+            small: './assets/img/carne_deitada.png'
+        };
+        
+        function createPattyOnGrill() {
+            const pattyWrapper = document.createElement('div');
+            pattyWrapper.className = 'patty-wrapper';
+            pattyWrapper.draggable = true;
+            
+            const patty = document.createElement('div');
+            patty.className = 'patty-on-grill';
+            patty.setAttribute('data-cooking-state', 'raw');
+            patty.setAttribute('data-cooking-progress', '0');
+            patty.setAttribute('data-flipped', 'false');
+            patty.style.backgroundImage = `url('${PATTY_IMAGES.raw}')`;
+            
+            const progressBar = document.createElement('div');
+            progressBar.className = 'cooking-progress';
+            const progressBarInner = document.createElement('div');
+            progressBarInner.className = 'cooking-progress-bar';
+            progressBar.appendChild(progressBarInner);
+            
+            const flipWarning = document.createElement('div');
+            flipWarning.className = 'flip-warning';
+            flipWarning.textContent = 'Vire a carne_deitada!';
+            
+            const readyNotification = document.createElement('div');
+            readyNotification.className = 'ready-notification';
+            readyNotification.textContent = 'Pronto!';
+            
+            pattyWrapper.appendChild(flipWarning);
+            pattyWrapper.appendChild(readyNotification);
+            pattyWrapper.appendChild(patty);
+            pattyWrapper.appendChild(progressBar);
+            
+            // Drag and drop para o pattyWrapper
+            pattyWrapper.addEventListener('dragstart', (e) => {
+                const patty = pattyWrapper.querySelector('.patty-on-grill');
+                const state = patty.getAttribute('data-cooking-state');
+                if (state === 'cooked' || state === 'burnt') {
+                    isDragging = true;
+                    currentPatty = pattyWrapper;
+                    setTimeout(() => {
+                        pattyWrapper.classList.add('dragging');
+                    }, 0);
+                } else {
+                    e.preventDefault();
+                }
+            });
+
+            pattyWrapper.addEventListener('dragend', (e) => {
+                isDragging = false;
+                currentPatty = null;
+                pattyWrapper.classList.remove('dragging');
+            });
+
+            pattyWrapper.addEventListener('click', handlePattyClick);
+            
+            return pattyWrapper;
+        }
+        
+        function handlePattyClick(e) {
+            const patty = e.currentTarget.querySelector('.patty-on-grill');
+            const state = patty.getAttribute('data-cooking-state');
+            const progress = parseInt(patty.getAttribute('data-cooking-progress'));
+            const isFlipped = patty.getAttribute('data-flipped') === 'true';
+            
+            if (state === 'side1' && progress >= 50 && !isFlipped) {
+                patty.setAttribute('data-cooking-state', 'side2');
+                patty.setAttribute('data-cooking-progress', '0');
+                patty.setAttribute('data-flipped', 'true');
+                patty.style.transform = 'scaleX(-1)';
+                
+                const flipWarning = e.currentTarget.querySelector('.flip-warning');
+                flipWarning.style.display = 'none';
+                
+                playSizzleSound();
+            }
+        }
+        
+        function startCooking(patty) {
+            const pattyElement = patty.querySelector('.patty-on-grill');
+            const progressBar = patty.querySelector('.cooking-progress-bar');
+            const flipWarning = patty.querySelector('.flip-warning');
+            
+            cookingPatties.push(patty);
+            
+            const startTime = Date.now();
+            const totalCookTime = 6000;
+            const flipTime = 3000;
+            
+            const timer = setInterval(() => {
+                const elapsedTime = Date.now() - startTime;
+                const progress = (elapsedTime / totalCookTime) * 100;
+                const isFlipped = pattyElement.getAttribute('data-flipped') === 'true';
+                
+                pattyElement.setAttribute('data-cooking-progress', progress.toString());
+                progressBar.style.width = `${progress}%`;
+                
+                if (!isFlipped) {
+                    if (elapsedTime <= flipTime) {
+                        pattyElement.setAttribute('data-cooking-state', 'side1');
+                        pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.cooking}')`;
+                        flipWarning.style.display = 'none';
+                        pattyElement.classList.remove('burnt');
+                    } else if (elapsedTime <= flipTime + 1000) {
+                        pattyElement.setAttribute('data-cooking-state', 'side1');
+                        pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.cooking}')`;
+                        flipWarning.style.display = 'block';
+                        pattyElement.classList.remove('burnt');
+                    } else {
+                        pattyElement.setAttribute('data-cooking-state', 'burnt');
+                        pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.burnt}')`;
+                        flipWarning.style.display = 'none';
+                        pattyElement.classList.add('burnt');
+                        clearInterval(timer);
+                        finishCooking(patty);
+                    }
+                } else {
+                    if (elapsedTime <= totalCookTime) {
+                        pattyElement.setAttribute('data-cooking-state', 'side2');
+                        pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.cooked}')`;
+                        flipWarning.style.display = 'none';
+                        pattyElement.classList.remove('burnt');
+                    } else {
+                        pattyElement.setAttribute('data-cooking-state', 'cooked');
+                        pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.cooked}')`;
+                        flipWarning.style.display = 'none';
+                        pattyElement.classList.remove('burnt');
+                        clearInterval(timer);
+                        finishCooking(patty);
+                    }
+                }
+            }, 50);
+            
+            cookingTimers.set(patty, timer);
+        }
+        
+        function finishCooking(patty) {
+            const pattyElement = patty.querySelector('.patty-on-grill');
+            const readyNotification = patty.querySelector('.ready-notification');
+            const index = cookingPatties.indexOf(patty);
+            
+            if (index !== -1) {
+                cookingPatties.splice(index, 1);
+            }
+            
+            const state = pattyElement.getAttribute('data-cooking-state');
+            if (state === 'burnt') {
+                burntPatties.push(patty);
+                gameLives--;
+                checkGameProgress();
+            } else if (state === 'cooked') {
+                cookedPatties.push(patty);
+                readyNotification.style.display = 'block';
+                playSuccessSound();
+            }
+            
+            const timer = cookingTimers.get(patty);
+            if (timer) {
+                clearInterval(timer);
+                cookingTimers.delete(patty);
+            }
+
+            // Inicia o temporizador de queima
+            patty.burnTimeout = setTimeout(() => {
+                if (state === 'cooked') {
+                    pattyElement.setAttribute('data-cooking-state', 'burnt');
+                    pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.burnt}')`;
+                    pattyElement.classList.remove('ready');
+                    pattyElement.classList.add('burnt');
+                    // Aqui você pode tocar um som, mostrar mensagem, etc.
+                }
+            }, 4000);
+        }
+        
+        function checkGameProgress() {
+            if (gameLives <= 0) {
+                endGame(false);
+            } else if (gameScore >= 2) {
+                endGame(true);
+            }
+        }
+        
+        function endGame(isWin) {
+            if (isWin) {
+                showVictoryScreen();
+            } else {
+                showGameOverScreen();
+            }
+        }
+        
+        function playSizzleSound() {
+            const sizzle = new Audio('./assets/audio/sizzle.mp3');
+            sizzle.volume = 0.3;
+            sizzle.play();
+        }
+        
+        function playSuccessSound() {
+            const success = new Audio('./assets/audio/success.mp3');
+            success.volume = 0.3;
+            success.play();
+        }
+        
+        function playTrashSound() {
+            const trashSound = new Audio('./assets/audio/trash.mp3');
+            trashSound.volume = 0.3;
+            trashSound.play();
+        }
+        
+        function showVictoryScreen() {
+            victoryScreen.style.display = 'flex';
+            setTimeout(() => {
+                window.location.href = 'MiniGame3.html';
+            }, 1800);
+        }
+        
+        function showGameOverScreen() {
+            minigame2Screen.style.display = 'none';
+            document.getElementById('gameover-screen').style.display = 'flex';
+        }
+        
+        function initializeMiniGame2() {
+            while (chapa.firstChild) {
+                chapa.removeChild(chapa.firstChild);
+            }
+            
+            activePatties = [];
+            cookingPatties = [];
+            cookedPatties = [];
+            burntPatties = [];
+            isDragging = false;
+            currentPatty = null;
+            cookingTimers.clear();
+            gameScore = 0;
+            gameLives = 3;
+        }
+
+        trashArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (isDragging && currentPatty) {
+                const patty = currentPatty.querySelector('.patty-on-grill');
+                const state = patty.getAttribute('data-cooking-state');
+                if (state === 'burnt') {
+                    trashArea.classList.add('drag-over');
+                }
+            }
+        });
+
+        trashArea.addEventListener('dragleave', () => {
+            trashArea.classList.remove('drag-over');
+        });
+
+        trashArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            trashArea.classList.remove('drag-over');
+            
+            if (isDragging && currentPatty) {
+                const patty = currentPatty.querySelector('.patty-on-grill');
+                const state = patty.getAttribute('data-cooking-state');
+                
+                if (state === 'burnt') {
+                    currentPatty.remove();
+                    
+                    const activeIndex = activePatties.indexOf(currentPatty);
+                    if (activeIndex !== -1) {
+                        activePatties.splice(activeIndex, 1);
+                    }
+                    
+                    const burntIndex = burntPatties.indexOf(currentPatty);
+                    if (burntIndex !== -1) {
+                        burntPatties.splice(burntIndex, 1);
+                    }
+                    
+                    playTrashSound();
+                    
+                    checkGameProgress();
+                }
+                
+                isDragging = false;
+                currentPatty = null;
+            }
+        });
+
+        // Adicione o drop para hambúrgueres prontos
+        finishedBurgers.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            if (isDragging && currentPatty) {
+                const patty = currentPatty.querySelector('.patty-on-grill');
+                const state = patty.getAttribute('data-cooking-state');
+                if (state === 'cooked') {
+                    finishedBurgers.classList.add('drag-over');
+                }
+            }
+        });
+
+        finishedBurgers.addEventListener('dragleave', () => {
+            finishedBurgers.classList.remove('drag-over');
+        });
+
+        finishedBurgers.addEventListener('drop', (e) => {
+            e.preventDefault();
+            finishedBurgers.classList.remove('drag-over');
+            if (isDragging && currentPatty) {
+                const patty = currentPatty.querySelector('.patty-on-grill');
+                const state = patty.getAttribute('data-cooking-state');
+                if (state === 'cooked') {
+                    // Remove o patty da chapa
+                    currentPatty.remove();
+
+                    // Remove das listas ativas
+                    const activeIndex = activePatties.indexOf(currentPatty);
+                    if (activeIndex !== -1) {
+                        activePatties.splice(activeIndex, 1);
+                    }
+
+                    const cookedIndex = cookedPatties.indexOf(currentPatty);
+                    if (cookedIndex !== -1) {
+                        cookedPatties.splice(cookedIndex, 1);
+                    }
+
+                    // Cria um novo patty na área de hambúrgueres prontos
+                    const cookedPatty = document.createElement('div');
+                    cookedPatty.className = 'cooked-patty';
+                    cookedPatty.style.backgroundImage = `url('${PATTY_IMAGES.small}')`;
+                    cookedPatty.style.backgroundSize = 'contain';
+                    cookedPatty.style.backgroundPosition = 'center';
+                    cookedPatty.style.backgroundRepeat = 'no-repeat';
+                    finishedBurgers.appendChild(cookedPatty);
+
+                    // Incrementa a pontuação
+                    gameScore++;
+
+                    // Toca o som de sucesso
+                    playSuccessSound();
+                }
+                isDragging = false;
+                currentPatty = null;
+            }
+        });
+
+        function goToMiniGame3() {
+            minigame2Screen.style.display = 'none';
+            document.getElementById('minigame3-screen').style.display = 'flex';
+        }
+
+        let prontoBtn = document.getElementById('pronto-btn');
+        prontoBtn.addEventListener('click', function() {
+            const prontos = finishedBurgers.querySelectorAll('.cooked-patty').length;
+            if (prontos >= 2) {
+                showVictoryScreen();
+            } else {
+                endGame(false);
+            }
+        });
+
+        document.getElementById('restart-btn').addEventListener('click', function() {
+            window.location.href = 'MiniGame1.html';
+        });
+
+        // --- TELA DE TUTORIAL MINIGAME2 ---
+        const tutorial2 = document.getElementById('tutorial2');
+        const tutorial2Text = document.getElementById('tutorial2-text');
+        const tutorial2Madeleine = document.getElementById('tutorial2-madeleine');
+        const tutorial2Next = document.getElementById('tutorial2-next');
+
+        const tutorialSteps2 = [
+            { text: "Arraste as carnes para a chapa para começar a fritar!", img: "./assets/img/Madeleine1.png" },
+            { text: "Espere o lado dourar, clique para virar e frite o outro lado.", img: "./assets/img/Madeleine2.png" },
+            { text: "Quando estiver pronta, arraste para o prato de hambúrgueres prontos.", img: "./assets/img/Madeleine3.png" },
+            { text: "Cuidado para não queimar! Se queimar, jogue na lixeira.", img: "./assets/img/Madeleine1.png" }
+        ];
+        let currentStep2 = 0;
+
+        function showTutorial2Step() {
+            tutorial2Text.textContent = tutorialSteps2[currentStep2].text;
+            tutorial2Madeleine.src = tutorialSteps2[currentStep2].img;
+        }
+    </script>
+</body>
+</html>
