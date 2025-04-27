@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/img/Madeleine_favicon.png" type="image/png">
-    <link rel="stylesheet" href="MiniGame1.css">
-    <script src="MiniGame1.js" defer></script>
+    <link rel="shortcut icon" href="./assets/img/madeleine_favicon.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
     <title>Cook & Fire</title>
 </head>
 <body>
     <div id="menu">
         <div id="Madeleine-home"></div>
         <div id="logo">
-            <img src="./assets/img/Logo.png">
+            <img src="./assets/img/logo.png">
         </div>
         <button id="start-btn">
             <img src="./assets/img/startButton.png">
@@ -24,7 +24,7 @@
 
     <div id="animation-screen">
         <div id="animation-madeleine"></div>
-        <div id="animation-text">Madeleine está preparando os ingredientes...</div>
+        <div id="animation-text">Madeleine está preparando os ingredientes..</div>
     </div>
 
     <div id="recipe-selection">
@@ -38,48 +38,11 @@
         </div>
     </div>
 
-    <div id="minigame">
-        <div id="tutorial">
-            <div id="tutorial-box">
-                <div id="tutorial-character"></div>
-                <div id="tutorial-text">Oi chef! Vamos preparar um hambúrguer delicioso?</div>
-                <button id="tutorial-next">Próximo</button>
-            </div>
-        </div>
-        <div id="score">Ingredientes: 0/6</div>
-        <div id="lives">Vidas: 3</div>
-        <div id="ingredients-needed">Precisa pegar:<br>• Pão (2x)<br>• Queijo (2x)<br>• Hambúrguer (1x)<br>• Tomate (1x)</div>
-        <div id="character"></div>
-    </div>
-
     <div id="ending-screen">
         <div id="you-dead"></div>
         <button id="restart-btn">
             <img src="./assets/img/restartButton.png">
         </button>
-    </div>
-
-    <div id="victory-screen">
-        <h2>Parabéns!</h2>
-        <p>Você completou a fase 1!</p>
-        <div id="transition-message">Agora vamos para a fase 2...</div>
-    </div>
-
-    <div id="minigame2-screen">
-        <div id="top-wall"></div>
-        <div id="grill-station">
-            <div id="chapa"></div>
-        </div>
-        <div class="bottom-area">
-            <div id="patty-stack-area">
-                <div id="patty-stack-visual">
-                    <img src="./assets/img/carne.png" alt="Carne">
-                </div>
-            </div>
-            <div id="removal-area">
-                <h3>Área de Remoção</h3>
-            </div>
-        </div>
     </div>
 
     <div id="credits-screen">
@@ -91,6 +54,41 @@
             <p><strong>Artes:</strong> Kosasin_Arts</p>
             <p><strong>Música:</strong> Paulo Nunes/Agatha Iasmin Koschel</p>
             <button id="back-btn" class="cloud-btn">Voltar ao Menu</button>
+        </div>
+    </div>
+    <div id="minigame">
+        <div id="ticket-objective">
+            <img src="./assets/img/ticket.png" alt="Ticket" id="ticket-img">
+            <div id="ticket-text">
+                <ul>
+                    <li>Pão: <span id="score-pao">0</span>/2</li>
+                    <li>Queijo: <span id="score-queijo">0</span>/1</li>
+                    <li>Carne: <span id="score-carne">0</span>/2</li>
+                    <li>Tomate: <span id="score-tomate">0</span>/1</li>
+                </ul>
+                <div id="score-total">Total: <span id="score-total-value">0</span>/6</div>
+                <div id="lives-panel-1"></div>
+            </div>
+        </div>
+        <div id="tutorial" style="display:none;">
+            <div id="tutorial-box">
+                <img id="tutorial-character" src="./assets/img/Madeleine1.png" alt="Madeleine">
+                <div class="tutorial-content">
+                    <div id="tutorial-text">Arraste as carnes para a chapa para começar a fritar!</div>
+                    <button id="tutorial-next">Próximo</button>
+                </div>
+            </div>
+        </div>
+        <div id="character"></div>
+    </div>
+    <div id="life-lost-anim" style="display:none; color:#ff4d4d; font-size:2em; font-weight:bold; position:absolute; left:60px; top:120px; z-index:100;">-1 ❤️</div>
+    <div id="tutorial3" style="display:none;">
+        <div id="tutorial3-box">
+            <img id="tutorial3-madeleine" src="./assets/img/Madeleine1.png" alt="Madeleine">
+            <div class="tutorial3-content">
+                <div id="tutorial3-text">Arraste os ingredientes para o hambúrguer, na ordem do ticket!</div>
+                <button id="tutorial3-next">Próximo</button>
+            </div>
         </div>
     </div>
 </body>
