@@ -1,0 +1,120 @@
+:root {
+    --bg-main: #1a1a1a;
+    --bg-screen: #101010;
+    --border-color: #4d4d4d;
+    --shadow-color: rgba(0, 0, 0, 0.6);
+    --game-area-bg: #2f2f2f;
+    --crosshair-idle: #cccccc;
+    --crosshair-target: #ff4747;
+    --crosshair-shadow: rgba(255, 255, 255, 0.3);
+    --health-bar-bg: rgba(20, 20, 20, 0.8);
+    --bullet-color: #f5f5f5;
+    --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition-speed: 0.15s;
+    --transition-timing: ease-out;
+    --health-bar-height: 12px;
+    --health-bar-width: 80px;
+    --health-bar-radius: 6px;
+    --health-high: linear-gradient(to right, #4CAF50, #8BC34A);
+    --health-medium: linear-gradient(to right, #FFC107, #FFEB3B);
+    --health-low: linear-gradient(to right, #F44336, #FF5722);
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: var(--font-stack);
+    cursor: none;
+  }
+  .game-screen {
+    width: 95vw;
+    height: 85vh;
+    max-width: 1300px;
+    max-height: 900px;
+    position: relative;
+    border: 8px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 5px 35px var(--shadow-color);
+    overflow: hidden;
+    background: linear-gradient(145deg, var(--bg-screen), #252525);
+  }
+  .game-display {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--game-area-bg);
+    overflow: hidden;
+    background-image: url('./assets/img/Cozinha.png');
+    background-size: cover;
+    background-position: center;
+  }
+  #player {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    background-image: url('./assets/img/hero.png');
+    background-color: transparent;
+    transition: transform var(--transition-speed) var(--transition-timing),
+    box-shadow var(--transition-speed) var(--transition-timing);
+    z-index: 10;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+  }
+  .zombie {
+      position: absolute;
+      width: 72px; /* Largura de cada quadro */
+      height: 72px; /* Altura de cada quadro */
+      background-image: url('./assets/img/zumbi.png');
+      background-size: 72px 288px; /* 4 quadros na vertical */
+      background-position: 0 0;
+      z-index: 5;
+  }
+  .health-bar-container {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: #333;
+      border-radius: 2px;
+      overflow: hidden;
+  }
+  .health-bar {
+      height: 100%;
+      background-color: #f00;
+      transition: width 0.3s;
+  }
+  .bullet {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: rgb(0, 0, 0);
+    border-radius: 50%;
+    z-index: 8;
+  }
+  #crosshair {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      border: 2px solid white;
+      z-index: 100;
+      cursor: none;
+  }
+  #weapon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    top: 50%;
+    left: 70%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    z-index: 11;
+  }
