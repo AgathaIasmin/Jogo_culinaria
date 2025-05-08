@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     const tutorialSteps = [{
-        text: "Oi chef! Vamos preparar um carne delicioso?",
+        text: "Oi chef! Vamos preparar um Hamburguer delicioso?",
         sprite: "./assets/img/Madeleine1.png"
     },
     {

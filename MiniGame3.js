@@ -1,15 +1,14 @@
-// Ingredientes na ordem correta
 const correctOrder = [
-    { name: 'Pão', img: './assets/img/pao.png' },
+    { name: 'pao', img: './assets/img/pao_bottom.png' },
     { name: 'carne', img: './assets/img/carne.png' },
     { name: 'Queijo', img: './assets/img/queijo.png' },
     { name: 'carne', img: './assets/img/carne.png' },
     { name: 'Tomate', img: './assets/img/tomate.png' },
-    { name: 'Pão', img: './assets/img/pao.png' }
+    { name: 'pao', img: './assets/img/pao_top.png' }
 ];
 
 let neededIngredients = {
-    'Pão': 2,
+    'pao': 2,
     'Queijo': 1,
     'carne': 2,
     'Tomate': 1
@@ -17,7 +16,7 @@ let neededIngredients = {
 
 let lives = 3;
 let stack = [];
-let timer = 30; // segundos
+let timer = 30;
 let timerInterval = null;
 const maxLives = 3;
 
@@ -65,10 +64,8 @@ function resetIngredients() {
             div.draggable = true;
             div.dataset.name = name;
             div.style.backgroundImage = `url('./assets/img/${name.toLowerCase()}.png')`;
-            // Arrastar com preview customizado
             div.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('ingredient', name);
-                // Cria imagem customizada para arrastar
                 const img = new Image();
                 img.src = `./assets/img/${name.toLowerCase()}.png`;
                 img.width = 60;
@@ -113,7 +110,6 @@ burgerArea.addEventListener('drop', (e) => {
         if (name === expected) {
             ingredientsDiv.removeChild(ingDiv);
             stack.push(name);
-            // Animação de queda
             const stacked = document.createElement('div');
             stacked.className = 'stacked-ingredient falling glow';
             stacked.style.backgroundImage = `url('./assets/img/${name.toLowerCase()}.png')`;

@@ -89,7 +89,7 @@ chapa.addEventListener('drop', (e) => {
 const PATTY_IMAGES = {
     raw: './assets/img/carne.png',
     cooking: './assets/img/carne.png',
-    cooked: './assets/img/carne_.png',
+    cooked: './assets/img/carne.png',
     burnt: './assets/img/carne.png',
     small: './assets/img/carne.png'
 };
@@ -114,7 +114,7 @@ function createPattyOnGrill() {
     
     const flipWarning = document.createElement('div');
     flipWarning.className = 'flip-warning';
-    flipWarning.textContent = 'Vire a carne!';
+    flipWarning.textContent = 'Clique para virar a carne!';
     
     const readyNotification = document.createElement('div');
     readyNotification.className = 'ready-notification';
@@ -254,14 +254,12 @@ function finishCooking(patty) {
         cookingTimers.delete(patty);
     }
 
-    // Inicia o temporizador de queima
     patty.burnTimeout = setTimeout(() => {
         if (state === 'cooked') {
             pattyElement.setAttribute('data-cooking-state', 'burnt');
             pattyElement.style.backgroundImage = `url('${PATTY_IMAGES.burnt}')`;
             pattyElement.classList.remove('ready');
             pattyElement.classList.add('burnt');
-            // Aqui você pode tocar um som, mostrar mensagem, etc.
         }
     }, 4000);
 }
@@ -374,7 +372,6 @@ trashArea.addEventListener('drop', (e) => {
     }
 });
 
-// Adicione o drop para hambúrgueres prontos
 finishedBurgers.addEventListener('dragover', (e) => {
     e.preventDefault();
     if (isDragging && currentPatty) {
@@ -397,10 +394,8 @@ finishedBurgers.addEventListener('drop', (e) => {
         const patty = currentPatty.querySelector('.patty-on-grill');
         const state = patty.getAttribute('data-cooking-state');
         if (state === 'cooked') {
-            // Remove o patty da chapa
             currentPatty.remove();
 
-            // Remove das listas ativas
             const activeIndex = activePatties.indexOf(currentPatty);
             if (activeIndex !== -1) {
                 activePatties.splice(activeIndex, 1);
@@ -411,7 +406,6 @@ finishedBurgers.addEventListener('drop', (e) => {
                 cookedPatties.splice(cookedIndex, 1);
             }
 
-            // Cria um novo patty na área de hambúrgueres prontos
             const cookedPatty = document.createElement('div');
             cookedPatty.className = 'cooked-patty';
             cookedPatty.style.backgroundImage = `url('${PATTY_IMAGES.small}')`;
@@ -420,10 +414,8 @@ finishedBurgers.addEventListener('drop', (e) => {
             cookedPatty.style.backgroundRepeat = 'no-repeat';
             finishedBurgers.appendChild(cookedPatty);
 
-            // Incrementa a pontuação
             gameScore++;
 
-            // Toca o som de sucesso
             playSuccessSound();
         }
         isDragging = false;

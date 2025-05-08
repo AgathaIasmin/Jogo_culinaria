@@ -14,11 +14,14 @@ const player = document.getElementById('player');
         fireRate: 80,
         crosshairDetectionRadius: 30,
         zombieInitialHealth: 3,
-        animationSpeed: 150
+        animationSpeed: 150,
+        plateSpawnRate: 5000,
+        counterHealth: 100,
+        counterDamageRate: 0.1
     };
 
     const playerState = {
-        x: 200,
+        x: 250,
         y: 150,
         direction: 'down',
         canShoot: true,
@@ -26,19 +29,71 @@ const player = document.getElementById('player');
         isMoving: false,
         animationFrame: 0,
         lastFrameTime: 0,
-        hasWeapon: true
+        hasWeapon: true,
+        hasPlate: false
     };
 
-    const obstacles = [
-        { left: 750, top: 0, width: 100, height: gameDisplay.clientHeight }
-    ];
+    const gameState = {
+        plates: [],
+        leftCounter: {
+            x: 100,
+            y: 400,
+            width: 150,
+            height: 100,
+            plates: []
+        },
+        rightCounter: {
+            x: gameDisplay.clientWidth - 250,
+            y: 400,
+            width: 150,
+            height: 100,
+            health: config.counterHealth,
+            healthBar: null
+        }
+    };
 
     let zombies = [];
     let bullets = [];
     let lastSpawnTime = 0;
+    let lastPlateSpawnTime = 0;
     let weapon = null;
 
     const keys = { up: false, down: false, left: false, right: false, pickup: false };
+
+    const barrierState = {
+        right: {
+            health: 100,
+            maxHealth: 100,
+            broken: false,
+            element: null
+        },
+        left: {
+            element: null
+        }
+    };
+
+    // Tutorial do MiniGame4
+    const tutorial4Steps = [
+        { text: "Pegue os pratos que aparecem na cozinha!", img: "./assets/img/Madeleine1.png" },
+        { text: "Leve os pratos até a bancada da esquerda para pontuar.", img: "./assets/img/Madeleine2.png" },
+        { text: "Monstros vão tentar quebrar a barreira da bancada da direita.", img: "./assets/img/Madeleine3.png" },
+        { text: "Atire nos monstros para proteger a barreira!", img: "./assets/img/Madeleine1.png" },
+        { text: "Se a barreira quebrar, os monstros podem te atacar. Não deixe eles te pegarem!", img: "./assets/img/Madeleine2.png" },
+        { text: "Boa sorte, chef! Clique em Começar para jogar.", img: "./assets/img/Madeleine1.png" }
+    ];
+    let currentTutorial4Step = 0;
+
+    const PLATE_GOAL = 15;
+    let platesDelivered = 0;
+
+    // Adicione um listener para a tecla E
+    let ePressed = false;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'e' || e.key === 'E') ePressed = true;
+    });
+    document.addEventListener('keyup', (e) => {
+        if (e.key === 'e' || e.key === 'E') ePressed = false;
+    });
 
     // ----- Funções do Jogo -----
     function createCrosshair() {
@@ -75,14 +130,27 @@ const player = document.getElementById('player');
             moveX *= 0.7071;
             moveY *= 0.7071;
         }
-        const newX = playerState.x + moveX * config.speed;
-        const newY = playerState.y + moveY * config.speed;
-        if (!checkCollision(newX, playerState.y, spriteWidth, spriteHeight, obstacles)) {
-            playerState.x = Math.max(0, Math.min(gameDisplay.clientWidth - spriteWidth, newX));
+        let newX = playerState.x + moveX * config.speed;
+        let newY = playerState.y + moveY * config.speed;
+        // Colisão com barreiras
+        const playerWidth = spriteWidth;
+        const playerHeight = spriteHeight;
+        // Esquerda
+        if (barrierState.left.element && checkBarrierCollision(newX, playerState.y, playerWidth, playerHeight, barrierState.left.element, barrierState.left.broken)) {
+            newX = playerState.x;
         }
-        if (!checkCollision(playerState.x, newY, spriteWidth, spriteHeight, obstacles)) {
-            playerState.y = Math.max(0, Math.min(gameDisplay.clientHeight - spriteHeight, newY));
+        // Direita
+        if (barrierState.right.element && checkBarrierCollision(newX, playerState.y, playerWidth, playerHeight, barrierState.right.element, barrierState.right.broken)) {
+            newX = playerState.x;
         }
+        if (barrierState.left.element && checkBarrierCollision(playerState.x, newY, playerWidth, playerHeight, barrierState.left.element, barrierState.left.broken)) {
+            newY = playerState.y;
+        }
+        if (barrierState.right.element && checkBarrierCollision(playerState.x, newY, playerWidth, playerHeight, barrierState.right.element, barrierState.right.broken)) {
+            newY = playerState.y;
+        }
+        playerState.x = Math.max(0, Math.min(gameDisplay.clientWidth - spriteWidth, newX));
+        playerState.y = Math.max(0, Math.min(gameDisplay.clientHeight - spriteHeight, newY));
         if (playerState.isMoving) {
             if (moveX > 0) playerState.direction = 'right';
             else if (moveX < 0) playerState.direction = 'left';
@@ -105,6 +173,7 @@ const player = document.getElementById('player');
         const bgX = -directionMap[playerState.direction] * spriteWidth;
         const bgY = -playerState.animationFrame * spriteHeight;
         player.style.backgroundPosition = `${bgX}px ${bgY}px`;
+        updatePlateOnPlayerPosition();
     }
     function shoot(event) {
         const rect = gameDisplay.getBoundingClientRect();
@@ -143,10 +212,19 @@ const player = document.getElementById('player');
     }
     function updateZombies() {
         zombies.forEach((zombie, index) => {
-            const newX = zombie.x - config.zombieSpeed;
-            if (!checkCollision(newX, zombie.y, spriteWidth, spriteHeight, obstacles)) {
-                zombie.x = newX;
+            let newX = zombie.x - config.zombieSpeed;
+            let collided = false;
+            // Colisão com barreira esquerda
+            if (barrierState.left.element && checkBarrierCollision(newX, zombie.y, spriteWidth, spriteHeight, barrierState.left.element, barrierState.left.broken)) {
+                newX = zombie.x;
+                collided = true;
             }
+            // Colisão com barreira direita
+            if (barrierState.right.element && checkBarrierCollision(newX, zombie.y, spriteWidth, spriteHeight, barrierState.right.element, barrierState.right.broken)) {
+                newX = zombie.x;
+                collided = true;
+            }
+            zombie.x = newX;
             zombie.element.style.left = `${zombie.x}px`;
             zombie.element.style.top = `${zombie.y}px`;
             updateZombieAnimation(zombie);
@@ -155,6 +233,7 @@ const player = document.getElementById('player');
                 zombies.splice(index, 1);
             }
         });
+        // Checagem de dano ocorre normalmente em damageRightBarrier
     }
     function spawnZombie() {
         const now = Date.now();
@@ -227,16 +306,6 @@ const player = document.getElementById('player');
             }
         });
     }
-    function checkCollision(x, y, width, height, objects) {
-        return objects.some(obj => {
-            return (
-                x < obj.left + obj.width &&
-                x + width > obj.left &&
-                y < obj.top + obj.height &&
-                y + height > obj.top
-            );
-        });
-    }
     function addWeaponToPlayer() {
         const weapon = document.createElement('div');
         weapon.id = 'weapon';
@@ -279,14 +348,334 @@ const player = document.getElementById('player');
     gameDisplay.addEventListener('click', (e) => {
         shoot(e);
     });
+    function createPlate() {
+        // Só cria um prato se não houver nenhum disponível
+        if (gameState.plates.some(p => !p.collected)) return;
+        const plate = document.createElement('div');
+        plate.className = 'plate';
+        // Posição fixa
+        const x = 400;
+        const y = 250;
+        plate.style.left = `${x}px`;
+        plate.style.top = `${y}px`;
+        plate.style.display = 'block';
+        gameDisplay.appendChild(plate);
+        gameState.plates.push({
+            element: plate,
+            x: x,
+            y: y,
+            collected: false
+        });
+    }
+    function isPlayerCollidingWithPlate(plate) {
+        // Aumenta a área do prato para facilitar a coleta
+        const expand = 20;
+        const playerRect = {
+            left: playerState.x,
+            right: playerState.x + spriteWidth,
+            top: playerState.y,
+            bottom: playerState.y + spriteHeight
+        };
+        const plateRect = {
+            left: plate.x - expand,
+            right: plate.x + 50 + expand,
+            top: plate.y - expand,
+            bottom: plate.y + 50 + expand
+        };
+        return (
+            playerRect.right > plateRect.left &&
+            playerRect.left < plateRect.right &&
+            playerRect.bottom > plateRect.top &&
+            playerRect.top < plateRect.bottom
+        );
+    }
+    function updatePlateFeedback() {
+        gameState.plates.forEach(plate => {
+            if (plate.collected) return;
+            const el = plate.element;
+            // Remove feedback antigo
+            el.classList.remove('can-pick');
+            const indicator = el.querySelector('.e-indicator');
+            if (indicator) el.removeChild(indicator);
+            // Se colidindo, adiciona feedback
+            if (isPlayerCollidingWithPlate(plate) && !playerState.hasPlate) {
+                el.classList.add('can-pick');
+                const eDiv = document.createElement('div');
+                eDiv.className = 'e-indicator';
+                eDiv.textContent = 'E';
+                el.appendChild(eDiv);
+            }
+        });
+    }
+    function checkPlateCollection() {
+        // Só feedback visual agora
+    }
+    function checkCounterInteraction() {
+        if (!playerState.hasPlate) return;
+        const playerRect = {
+            left: playerState.x,
+            right: playerState.x + spriteWidth,
+            top: playerState.y,
+            bottom: playerState.y + spriteHeight
+        };
+        const leftCounterRect = {
+            left: gameState.leftCounter.x,
+            right: gameState.leftCounter.x + gameState.leftCounter.width,
+            top: gameState.leftCounter.y,
+            bottom: gameState.leftCounter.y + gameState.leftCounter.height
+        };
+        if (
+            playerRect.right > leftCounterRect.left &&
+            playerRect.left < leftCounterRect.right &&
+            playerRect.bottom > leftCounterRect.top &&
+            playerRect.top < leftCounterRect.bottom
+        ) {
+            playerState.hasPlate = false;
+            gameState.leftCounter.plates.push({
+                x: gameState.leftCounter.x + (gameState.leftCounter.plates.length * 20),
+                y: gameState.leftCounter.y
+            });
+            updateCounterPlates();
+            platesDelivered++;
+            if (platesDelivered < PLATE_GOAL) {
+                createPlate();
+            } else {
+                setTimeout(() => { alert('Parabéns! Você entregou todos os pratos!'); }, 100);
+            }
+        }
+    }
+    function updateCounterPlates() {
+        const counterElement = document.querySelector('.left-counter');
+        if (!counterElement) return;
+
+        counterElement.innerHTML = '';
+        gameState.leftCounter.plates.forEach(plate => {
+            const plateElement = document.createElement('div');
+            plateElement.className = 'counter-plate';
+            plateElement.style.left = `${plate.x}px`;
+            plateElement.style.top = `${plate.y}px`;
+            counterElement.appendChild(plateElement);
+        });
+    }
+    function updateRightCounterHealth() {
+        const counterElement = document.querySelector('.right-counter');
+        if (!counterElement) return;
+
+        if (!gameState.rightCounter.healthBar) {
+            const healthBar = document.createElement('div');
+            healthBar.className = 'counter-health-bar';
+            counterElement.appendChild(healthBar);
+            gameState.rightCounter.healthBar = healthBar;
+        }
+
+        const healthPercentage = (gameState.rightCounter.health / config.counterHealth) * 100;
+        gameState.rightCounter.healthBar.style.width = `${healthPercentage}%`;
+    }
+    function damageRightCounter() {
+        if (zombies.length > 0) {
+            gameState.rightCounter.health -= config.counterDamageRate;
+            updateRightCounterHealth();
+
+            if (gameState.rightCounter.health <= 0) {
+                endGame(false);
+            }
+        }
+    }
+    function setupBarriers() {
+        barrierState.right.element = document.querySelector('.right-barrier');
+        barrierState.left.element = document.querySelector('.left-barrier');
+    }
+    function updateRightBarrierVisual() {
+        if (!barrierState.right.element) return;
+        if (barrierState.right.broken) {
+            barrierState.right.element.classList.add('broken');
+        } else {
+            barrierState.right.element.classList.remove('broken');
+        }
+    }
+    function updateBarrierHealthBar() {
+        const bar = document.querySelector('.barrier-health-bar');
+        if (!bar) return;
+        const percent = Math.max(0, barrierState.right.health / barrierState.right.maxHealth);
+        bar.style.width = (percent * 100) + '%';
+        if (percent > 0.6) {
+            bar.style.background = 'linear-gradient(to right, #4CAF50, #8BC34A)';
+        } else if (percent > 0.3) {
+            bar.style.background = 'linear-gradient(to right, #FFC107, #FFEB3B)';
+        } else {
+            bar.style.background = 'linear-gradient(to right, #F44336, #FF5722)';
+        }
+    }
+    function damageRightBarrier() {
+        if (barrierState.right.broken) return;
+        if (!barrierState.right.element) return;
+        const barrierRect = barrierState.right.element.getBoundingClientRect();
+        // Aumenta a área de colisão em 30px para cada lado
+        const expand = 30;
+        const bigBarrierRect = {
+            left: barrierRect.left - expand,
+            right: barrierRect.right + expand,
+            top: barrierRect.top - expand,
+            bottom: barrierRect.bottom + expand
+        };
+        let collidingZombies = 0;
+        zombies.forEach(zombie => {
+            const zombieRect = zombie.element.getBoundingClientRect();
+            if (
+                zombieRect.right > bigBarrierRect.left &&
+                zombieRect.left < bigBarrierRect.right &&
+                zombieRect.bottom > bigBarrierRect.top &&
+                zombieRect.top < bigBarrierRect.bottom
+            ) {
+                collidingZombies++;
+            }
+        });
+        if (collidingZombies > 0) {
+            barrierState.right.health -= config.counterDamageRate * collidingZombies;
+            updateBarrierHealthBar();
+            if (barrierState.right.health <= 0) {
+                barrierState.right.broken = true;
+                updateRightBarrierVisual();
+            }
+        }
+    }
+    function checkZombiePlayerCollision() {
+        if (!barrierState.right.broken) return;
+        const playerRect = {
+            left: playerState.x,
+            right: playerState.x + spriteWidth,
+            top: playerState.y,
+            bottom: playerState.y + spriteHeight
+        };
+        zombies.forEach(zombie => {
+            const zombieRect = zombie.element.getBoundingClientRect();
+            const gameRect = gameDisplay.getBoundingClientRect();
+            // Ajusta para coordenadas relativas ao gameDisplay
+            const zx = zombie.x;
+            const zy = zombie.y;
+            if (
+                playerRect.right > zx &&
+                playerRect.left < zx + spriteWidth &&
+                playerRect.bottom > zy &&
+                playerRect.top < zy + spriteHeight
+            ) {
+                endGame(false);
+            }
+        });
+    }
+    function showTutorial4Step() {
+        document.getElementById('tutorial4-text').textContent = tutorial4Steps[currentTutorial4Step].text;
+        document.getElementById('tutorial4-madeleine').src = tutorial4Steps[currentTutorial4Step].img;
+        const btn = document.getElementById('tutorial4-next');
+        if (currentTutorial4Step === tutorial4Steps.length - 1) {
+            btn.textContent = 'Começar';
+        } else {
+            btn.textContent = 'Próximo';
+        }
+    }
     function gameLoop() {
+        if (window._gameShouldRun === false) return;
         handleMovement();
         updatePlayerAnimation();
         updatePlayer();
         spawnZombie();
         updateZombies();
         updateBullets();
+        createPlate();
+        updatePlateFeedback();
+        checkCounterInteraction();
+        if (!barrierState.right.broken) {
+            damageRightBarrier();
+        } else {
+            checkZombiePlayerCollision();
+        }
         requestAnimationFrame(gameLoop);
     }
     createCrosshair();
-    gameLoop();
+    setupBarriers();
+    updateBarrierHealthBar();
+    window._gameShouldRun = false;
+
+    // Função de colisão com barreiras
+    function checkBarrierCollision(x, y, width, height, barrier, broken) {
+        if (broken) return false;
+        const barrierRect = barrier.getBoundingClientRect();
+        const gameRect = gameDisplay.getBoundingClientRect();
+        // Coordenadas relativas ao gameDisplay
+        const bLeft = barrierRect.left - gameRect.left;
+        const bRight = barrierRect.right - gameRect.left;
+        const bTop = barrierRect.top - gameRect.top;
+        const bBottom = barrierRect.bottom - gameRect.top;
+        return (
+            x < bRight &&
+            x + width > bLeft &&
+            y < bBottom &&
+            y + height > bTop
+        );
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('tutorial4').style.display = 'flex';
+        showTutorial4Step();
+    });
+
+    document.getElementById('tutorial4-next').onclick = function() {
+        currentTutorial4Step++;
+        if (currentTutorial4Step < tutorial4Steps.length) {
+            showTutorial4Step();
+        } else {
+            document.getElementById('tutorial4').style.display = 'none';
+            window._gameShouldRun = true;
+            requestAnimationFrame(gameLoop);
+        }
+    };
+
+    // No início do jogo, crie o primeiro prato
+    createPlate();
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.key === 'e' || e.key === 'E') && !playerState.hasPlate) {
+            let collected = false;
+            gameState.plates.forEach((plate, index) => {
+                if (plate.collected) return;
+                if (isPlayerCollidingWithPlate(plate)) {
+                    plate.collected = true;
+                    playerState.hasPlate = true;
+                    plate.element.style.display = 'none';
+                    collected = true;
+                    showPlateOnPlayer(true);
+                }
+            });
+            if (collected) {
+                console.log('Prato coletado!');
+            } else {
+                console.log('Tentou coletar, mas não estava colidindo.');
+            }
+        }
+    });
+
+    // Adicione um prato visual ao player
+    function showPlateOnPlayer(show) {
+        let plateOnPlayer = document.getElementById('plate-on-player');
+        if (show && !plateOnPlayer) {
+            plateOnPlayer = document.createElement('div');
+            plateOnPlayer.id = 'plate-on-player';
+            plateOnPlayer.className = 'plate';
+            plateOnPlayer.style.width = '40px';
+            plateOnPlayer.style.height = '40px';
+            plateOnPlayer.style.zIndex = 20;
+            plateOnPlayer.style.position = 'absolute';
+            player.appendChild(plateOnPlayer);
+        } else if (!show && plateOnPlayer) {
+            plateOnPlayer.remove();
+        }
+    }
+
+    // Atualize a posição do prato junto ao player
+    function updatePlateOnPlayerPosition() {
+        const plateOnPlayer = document.getElementById('plate-on-player');
+        if (plateOnPlayer) {
+            plateOnPlayer.style.left = '16px';
+            plateOnPlayer.style.top = '-18px';
+        }
+    }
