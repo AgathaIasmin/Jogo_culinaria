@@ -1,34 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/img/madeleine_favicon.png" type="image/png">
-    <link rel="stylesheet" href="MiniGame4.css">
-    <script src="MiniGame4.js" defer></script>
-    <title>Cook & Fire</title>
-</head>
-<body>
-    <div id="tutorial4" style="display:none;">
-        <div id="tutorial4-box">
-            <img id="tutorial4-madeleine" src="./assets/img/Madeleine1.png" alt="Madeleine">
-            <div>
-                <div id="tutorial4-text">Pegue os pratos que aparecem na cozinha!</div>
-                <button id="tutorial4-next">Próximo</button>
-            </div>
-        </div>
-    </div>
-    <div class="game-screen">
-        <div class="game-display">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" href="./assets/img/madeleine_favicon.png" type="image/png">
+      <link rel="stylesheet" href="MiniGame4.css">
+      <script src="MiniGame4.js" defer></script>
+      <title>Cook & Fire</title>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <div class="game-screen">
+         <div class="game-display">
             <div id="player" class="player"></div>
             <div id="crosshair"></div>
-            <div class="left-counter"></div>
-            <div class="right-counter"></div>
-            <div class="barrier left-barrier"></div>
-            <div class="barrier right-barrier"></div>
-            <div class="barrier-health-bar-container"><div class="barrier-health-bar"></div></div>
-        </div>
-        <div id="weapon"></div>
-    </div>
-</body>
+         </div>
+         <div id="hud">
+            <span id="score">Pontos: 0</span>
+            <span id="wave">Wave: 1</span>
+            <span id="grenades">Granadas: 3</span>
+            <span id="ammo">Munição: 8/8</span>
+            <span id="record">Recorde: 0</span>
+         </div>
+         <div id="mesa-health-container">
+            <div id="mesa-health-bar"></div>
+         </div>
+         <div id="gameover" style="display:none;">
+            <h1>Game Over</h1>
+            <button id="restartBtn">Reiniciar</button>
+         </div>
+         <div id="pause-overlay" style="display:none;">
+            <h2>PAUSADO</h2>
+            <p>Pressione ESC para voltar</p>
+         </div>
+      </div>
+   </body>
 </html>

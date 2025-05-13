@@ -1,80 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../assets/img/Madeleine_favicon.png" type="image/png">
-    <link rel="stylesheet" href="MiniGame2.css">
-    <script src="MiniGame2.js" defer></script>
-    <title>Cook & Fire</title>
-</head>
-<body>
-    <!-- Tela de Tutorial MiniGame2 -->
-    <div id="tutorial2" style="display:none;">
-        <div id="tutorial2-box">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="shortcut icon" href="../assets/img/Madeleine_favicon.png" type="image/png">
+      <link rel="stylesheet" href="MiniGame2.css">
+      <script src="MiniGame2.js" defer></script>
+      <title>Cook & Fire</title>
+   </head>
+   <body>
+      <div id="tutorial2" style="display:none;">
+         <div id="tutorial2-box">
             <img id="tutorial2-madeleine" src="../assets/img/Madeleine1.png" alt="Madeleine">
             <div>
-                <div id="tutorial2-text">Arraste as carnes para a chapa para começar a fritar!</div>
-                <button id="tutorial2-next">Próximo</button>
+               <div id="tutorial2-text">Arraste as carnes para a chapa para começar a fritar!</div>
+               <button id="tutorial2-next">Próximo</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Tela de início personalizada -->
-    <div id="start-screen">
-        <img id="madeleine-corner" src="../assets/img/Madeleine_home.png" alt="Madeleine">
-        <div class="start-panel">
+         </div>
+      </div>
+      <div id="start-screen">
+         <img id="madeleine-corner" src="../assets/img/Madeleine_home.png" alt="Madeleine">
+         <div class="start-panel">
             <p class="madeleine-speech">Oi! Pronto para começar a fritar o hamburguer?</p>
             <button id="start-minigame-btn">
-                <img src="../assets/img/startButton.png" alt="Começar">
+            <img src="../assets/img/startButton.png" alt="Começar">
             </button>
-        </div>
-    </div>
-
-    <div id="victory-screen">
-        <h2>Parabéns!</h2>
-        <p>Você completou a fase!</p>
-    </div>
-
-    <div id="gameover-screen" style="display: none;">
-        <div id="you-dead"></div>
-        <button id="restart-btn">
-            <img src="../assets/img/restartButton.png">
-        </button>
-    </div>
-
-    <div id="minigame2-screen" style="display: none;">
-        <div id="ticket-objective">
+         </div>
+      </div>
+      <div id="victory-screen">
+         <h2>Parabéns!</h2>
+         <p>Você completou a fase!</p>
+      </div>
+      <div id="gameover-screen" style="display: none;">
+         <div id="you-dead"></div>
+         <button id="restart-btn">
+         <img src="../assets/img/restartButton.png">
+         </button>
+      </div>
+      <div id="minigame2-screen" style="display: none;">
+         <div id="ticket-objective">
             <img src="../assets/img/ticket.png" alt="Ticket" id="ticket-img">
             <div id="ticket-text">
-                Frite <br>
-                2 carnes <br>
-                e coloque <br>
-                nos prontos
+               Frite <br><br>
+               2 carnes <br><br>
+               e coloque <br><br>
+               nos prontos
             </div>
-        </div>
-        <div id="game-container">
+         </div>
+         <div id="game-container">
             <div id="top-wall"></div>
             <div id="grill-station">
-                <div id="chapa"></div>
+               <div id="chapa"></div>
             </div>
             <div class="bottom-area">
-                <div id="patty-stack-area">
-                    <div id="patty-stack-visual" draggable="true">
-                        <img src="../assets/img/carne.png" alt="carne">
-                    </div>
-                </div>
-                <button id="pronto-btn" style="height: 60px; align-self: center; font-size: 1.2em; background: #ff9800; color: #fff; border: none; border-radius: 16px; padding: 0 30px; margin: 0 20px; cursor: pointer; font-family: 'Comic Sans MS', cursive;">
-                    Pronto!
-                </button>
-                <div id="trash-area">
-                    <h3>Lixeira</h3>
-                </div>
-                <div id="finished-burgers">
-                    <h3>Hambúrgueres Prontos</h3>
-                </div>
+               <div id="patty-stack-area">
+                  <div id="patty-stack-visual" draggable="true">
+                     <img src="../assets/img/carne.png" alt="carne">
+                  </div>
+               </div>
+               <button id="pronto-btn" style="height: 60px; align-self: center; font-size: 1.2em; background: #ff9800; color: #fff; border: none; border-radius: 16px; padding: 0 30px; margin: 0 20px; cursor: pointer; font-family: 'Comic Sans MS', cursive;">
+               Pronto!
+               </button>
+               <div id="trash-area">
+                  <h3>Lixeira</h3>
+               </div>
+               <div id="finished-burgers">
+                  <h3>Hambúrgueres Prontos</h3>
+               </div>
             </div>
-        </div>
-    </div>
-</body>
+         </div>
+      </div>
+   </body>
 </html>
