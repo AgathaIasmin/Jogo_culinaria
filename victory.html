@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/madeleine_favicon.png" type="image/png">
+    <link rel="stylesheet" href="victory.css">
+    <title>Vitória!</title>
+</head>
+<body>
+    <div id="victory-screen">
+        <h2>Parabéns!</h2>
+        <p>Você completou todos os minigames!</p>
+        <button id="next-game-btn">Inicio</button>
+    </div>
+    <script>
+        document.getElementById('next-game-btn').onclick = function() {
+            window.location.href = './index.html'; // Redirect to the main menu or next game
+        };
+    </script>
+</body>
+</html>
