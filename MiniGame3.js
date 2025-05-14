@@ -1,5 +1,5 @@
 const correctOrder = [{
-    name: 'Pão',
+    name: 'pao',
     img: './assets/img/pao.png'
   },
   {
@@ -19,12 +19,12 @@ const correctOrder = [{
     img: './assets/img/tomate.png'
   },
   {
-    name: 'Pão',
+    name: 'pao',
     img: './assets/img/pao.png'
   }
 ];
 let neededIngredients = {
-  'Pão': 2,
+  'pao': 2,
   'Queijo': 1,
   'carne': 2,
   'Tomate': 1
@@ -177,7 +177,7 @@ function checkSuccess() {
         ready.style.animation = 'pop 1s';
         burgerArea.appendChild(ready);
         setTimeout(() => {
-          window.location.href = 'MiniGame4.html';
+          window.location.href = 'victory.html'; // Change to victory screen
         }, 1500);
       }, 1200);
     } else {
@@ -291,3 +291,10 @@ window.addEventListener('DOMContentLoaded', function() {
 document.getElementById('restart3-btn').addEventListener('click', function() {
   window.location.href = './index.html';
 });
+
+function showVictoryScreen() {
+    victoryScreen.style.display = 'flex';
+    setTimeout(() => {
+        window.location.href = 'victory.html'; // Change to victory screen
+    }, 1800);
+}
